@@ -1,17 +1,14 @@
 import socket
 import threading
-
-#####################
-# E se o servidor cair?
-# Unico usuario;
-# unidades sao os processos-objetos
-# nao é web
-#####################
+import login
 
 HOST = 'localhost';
 PORT = 7777;
 
 clientesAtivos = [];
+
+#testes
+cliente1 = ['ariel', '2522'];
 
 def main():
     servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM); # ( IPV4, Protocolo TCP )
@@ -31,18 +28,20 @@ def main():
 def tratamentoDeMensagens(cliente):
     while True:
         try:
-            msg = cliente.recv(2048);
-            transmissao(msg,cliente);
+            msg = login.boasVindas(cliente);
+            cliente.send(f'{ msg }'.encode('utf-8'));
+            msg = cliente.recv(2048).decode('utf-8');
+            print(msg);
         except:
             deletaCliente(cliente);
             break;
 
 
-def transmissao(msg, cliente):
+def transmissao(cliente):
     for clienteA in clientesAtivos:
         if clienteA != cliente:
             try:
-                clienteA.send(msg);
+                clienteA.send('ping'.encode('utf-8'));
             except:
                 deletaCliente(clienteA);
 
