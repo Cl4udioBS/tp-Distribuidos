@@ -4,7 +4,7 @@ class Cerveja:
         self.__ABV = ABV
         self.__IBU = IBU
         self.__estilo = estilo
-        self.__quantidade = quantidade
+        ##self.__quantidade = quantidade
     
     def get_nome(self):
         return self.__nome
