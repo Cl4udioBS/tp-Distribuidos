@@ -1,5 +1,6 @@
 import socket
 import threading
+import login
 
 HOST = 'localhost';
 PORT = 7777;
@@ -22,12 +23,13 @@ def main():
         cliente, endereco = servidor.accept();
         clientesAtivos.append(cliente);
         thread = threading.Thread(target=tratamentoDeMensagens, args= [cliente]);
-        #threadLogin = threading.Thread(target=tratamentoDeMensagens, args= [cliente]);
         thread.start();
 
 def tratamentoDeMensagens(cliente):
     while True:
         try:
+            msg = login.boasVindas(cliente);
+            cliente.send(f'{ msg }'.encode('utf-8'));
             msg = cliente.recv(2048).decode('utf-8');
             print(msg);
         except:
@@ -39,7 +41,7 @@ def transmissao(cliente):
     for clienteA in clientesAtivos:
         if clienteA != cliente:
             try:
-                clienteA.send(f'ping'.encode('utf-8'));
+                clienteA.send('ping'.encode('utf-8'));
             except:
                 deletaCliente(clienteA);
 
