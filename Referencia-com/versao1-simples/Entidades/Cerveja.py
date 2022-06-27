@@ -38,3 +38,4 @@ class Cerveja:
     
     def get_quantidade(self):
         return self.__quantidade
+
