@@ -42,7 +42,7 @@ def CreateTableBar(nomeDb):
         cursor = sqliteConnection.cursor()
         sqlite_create_table_query = '''CREATE TABLE BAR (
                                 id integer PRIMARY KEY AUTOINCREMENT,
-                                nome_usuario text F,
+                                nome_usuario text 0F,
                                 nome_cerveja text,
                                 abv  real,
                                 ibu integer,
@@ -60,7 +60,28 @@ def CreateTableBar(nomeDb):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
+def CreateTableTrocas(nomeDb):
+    try:
+        sqliteConnection = sqlite3.connect(nomeDb)
+        cursor = sqliteConnection.cursor()
+        sqlite_create_table_query = '''CREATE TABLE TROCAS (
+                                id integer PRIMARY KEY AUTOINCREMENT,
+                                id_cerveja_solicitante integer ,
+                                id_cerveja_executor integer,
+                                nome_usr_solicitante  text,
+                                nome_usr_executor text,
+                                status text
+                                );'''
+        
+        cursor = sqliteConnection.cursor()
+       
+        cursor.execute(sqlite_create_table_query)
+        sqliteConnection.commit()
+      
+        cursor.close()
 
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
 
 ##Insert e Selects usados durante a execução do sistema
 def InsertUsuario(nomeBanco,nome, senha):
@@ -91,7 +112,7 @@ def InsertCervejaBar(nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo):
         data = (nome_usuario, nome_cerveja,abv,ibu,estilo)
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
-        print("usuario inserido com sucesso", cursor.rowcount)
+        print("cerevja inserido com sucesso", cursor.rowcount)
         cursor.close()
 
     except sqlite3.Error as error:
@@ -200,5 +221,10 @@ if __name__ == "__main__":
     print(especifica)
     InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
     test = SelectCervejaByUsuario("claudio")
+<<<<<<< HEAD
     print("um usuario: ", test, type(test))
+=======
+    print("um usuario: ", test)
+    CreateTableTrocas(nomeBanco)
+>>>>>>> 7a85f1d8b3f3ef4641b720595369e3bc11ff57ee
     ##CreateTableBar(nomeBanco)
