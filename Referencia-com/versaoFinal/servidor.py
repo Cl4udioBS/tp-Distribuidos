@@ -1,6 +1,7 @@
 import socket
 import threading
 import logar
+from entidades import cliente as c
 
 HOST = 'localhost';
 PORT = 7777;
@@ -28,16 +29,16 @@ def main():
 def tratamentoDeMensagens(cliente):
     while True:
         try:
-            msg = logar.boasVindas(cliente);
+            logar.boasVindas(cliente);
             cliente.send(f'{ msg }'.encode('utf-8'));
-            msg = cliente.recv(2048).decode('utf-8');
-            print('msg:'+msg);
+            c.recebeMensagens(cliente);
+
         except:
             deletaCliente(cliente);
             break;
 
 
-def transmissao(cliente):
+def transmissao(cliente): #verificar online
     for clienteA in clientesAtivos:
         if clienteA != cliente:
             try:

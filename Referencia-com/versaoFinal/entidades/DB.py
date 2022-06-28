@@ -1,6 +1,8 @@
 import sqlite3
 
-##Criação, colocar scrpt ra fazer esses só no primeiro
+nomeBanco = "TPSD"
+
+##Criação, colocar script para fazer esses só no primeiro
 
 def createDB(nome):
     db = nome+'.db'
@@ -98,7 +100,7 @@ def InsertCervejaBar(nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo):
         print("Error while connecting to sqlite", error)
 
 
-def SelectTodosUsuarios():
+def SelectTodosUsuarios(nomeBanco):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
@@ -181,24 +183,30 @@ def SelectCervejaByUsuario(nome_usuario):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
+def InicializaBD():    
+    try:
+        sqlite3.connect('file:TPSD.db?mode=rw', uri=True)
+    except:
+        createDB(nomeBanco)
+        CreateTableBar(nomeBanco)
+        CreateTableUsuario(nomeBanco)
+        InsertUsuario(nomeBanco,"claudio","0")
+        InsertUsuario(nomeBanco,"aryel","1")
+        InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
+        InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
+        InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
 
-
-if __name__ == "__main__":
-    nomeBanco = "testePy"
-    createDB(nomeBanco)
-    CreateTableUsuario(nomeBanco)
-    InsertUsuario(nomeBanco,"claudio","generico")
-    
-    InsertUsuario(nomeBanco,"aryel","mmaisum")
-    teste = SelectTodosUsuarios()
+def TesteBD():
+    teste = SelectTodosUsuarios(nomeBanco)
     print("usuarios: ", teste)
-    InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
-    InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
     cervejas = SelectTodasCervejas()
     print("todas cervejas: ", cervejas)
     especifica = SelectCervejaByNome("brahma")
     print(especifica)
-    InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
     test = SelectCervejaByUsuario("claudio")
     print("um usuario: ", test)
-    CreateTableBar(nomeBanco)
+
+if __name__ == "__main__":
+    InicializaBD()
+    TesteBD()  
+    
