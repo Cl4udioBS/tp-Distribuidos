@@ -1,6 +1,6 @@
 import socket
 import threading
-import login
+import logar
 
 HOST = 'localhost';
 PORT = 7777;
@@ -28,10 +28,10 @@ def main():
 def tratamentoDeMensagens(cliente):
     while True:
         try:
-            msg = login.boasVindas(cliente);
+            msg = logar.boasVindas(cliente);
             cliente.send(f'{ msg }'.encode('utf-8'));
             msg = cliente.recv(2048).decode('utf-8');
-            print(msg);
+            print('msg:'+msg);
         except:
             deletaCliente(cliente);
             break;

@@ -185,20 +185,20 @@ def SelectCervejaByUsuario(nome_usuario):
 
 if __name__ == "__main__":
     nomeBanco = "testePy"
-    ##createDB(nomeBanco)
-    #CreateTableUsuario(nomeBanco)
-    #InsertUsuario(nomeBanco,"claudio","generico")
+    createDB(nomeBanco)
+    CreateTableUsuario(nomeBanco)
+    InsertUsuario(nomeBanco,"claudio","generico")
     
-    ##InsertUsuario(nomeBanco,"aryel","mmaisum")
+    InsertUsuario(nomeBanco,"aryel","mmaisum")
     teste = SelectTodosUsuarios()
     print("usuarios: ", teste)
-    #InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
-    #InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
+    InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
+    InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
     cervejas = SelectTodasCervejas()
     print("todas cervejas: ", cervejas)
     especifica = SelectCervejaByNome("brahma")
     print(especifica)
     InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
     test = SelectCervejaByUsuario("claudio")
-    print("um usuario: ", test, type(test))
-    ##CreateTableBar(nomeBanco)
+    print("um usuario: ", test)
+    CreateTableBar(nomeBanco)
