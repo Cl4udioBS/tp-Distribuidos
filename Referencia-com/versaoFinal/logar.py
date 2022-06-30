@@ -25,15 +25,18 @@ def boasVindas(cliente):
 
 def Authentication(nome,senha):
     try:
-        sqliteConnection = sqlite3.connect('testePy')
-        cursor = sqliteConnection.cursor()
-        sqlite_select_query = """SELECT * from Usuarios WHERE nome=? and senha=?"""
-        cursor.execute(sqlite_select_query,(nome,senha));
-        sqliteConnection.commit()
-        records = cursor.fetchall()
-        print(records); 
-        cursor.close()
+        
+        #sqliteConnection = sqlite3.connect('testePy')
+        #cursor = sqliteConnection.cursor()
+        #sqlite_select_query = """SELECT * from Usuarios WHERE nome=? and senha=?"""
+        #cursor.execute(sqlite_select_query,(nome,senha));
+        #sqliteConnection.commit()
+        #records = cursor.fetchall()
+        #print(records); 
+        #cursor.close()
 
+        teste = DB.SelectUsuarioByNome(nome)
+        print("oi",teste)
            
 
     except sqlite3.Error as error:
