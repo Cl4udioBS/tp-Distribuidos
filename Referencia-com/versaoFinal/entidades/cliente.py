@@ -39,11 +39,11 @@ def recebeMensagens(cliente):
 def enviaMensagens(cliente, usuario):
     while True:
         try:
-            msg = input('Enviar: ');
-            cliente.send(f'<{usuario}> {msg}'.encode('utf-8'));
+            msg = input('\n>');
+            cliente.send(f'{msg}'.encode('utf-8'));
+            print("\nEnviado!")
         except:
             print('Falha no envio!\n');
             return;
-
 
 main();

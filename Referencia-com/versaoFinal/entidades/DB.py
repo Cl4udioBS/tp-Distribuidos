@@ -1,6 +1,6 @@
 import sqlite3
 
-nomeBanco = "TPSD"
+nomeBanco = "TPSD.db"
 
 ##Criação, colocar script para fazer esses só no primeiro
 
@@ -90,10 +90,7 @@ def InsertUsuario(nomeBanco,nome, senha):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
-        sqlite_insert_query = """INSERT INTO Usuarios
-                          (nome, senha)  VALUES  (?,?)"""
-        data = (nome, senha)
-        cursor.execute(sqlite_insert_query,data)
+        cursor.execute("INSERT INTO Usuarios values (?, ?)",(nome, senha))
         sqliteConnection.commit()
         print("usuario inserido com sucesso", cursor.rowcount)
         cursor.close()
@@ -253,7 +250,7 @@ def InicializaBD():
     try:
         sqlite3.connect('file:TPSD.db?mode=rw', uri=True)
     except:
-        createDB(nomeBanco)
+        createDB("TPSD")
         CreateTableBar(nomeBanco)
         CreateTableUsuario(nomeBanco)
         CreateTableTrocas(nomeBanco)

@@ -8,9 +8,6 @@ PORT = 7777;
 
 clientesAtivos = [];
 
-#testes
-cliente1 = ['ariel', '2522'];
-
 def main():
     servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM); # ( IPV4, Protocolo TCP )
     try: 
