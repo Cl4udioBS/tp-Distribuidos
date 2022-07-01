@@ -246,6 +246,27 @@ def SelectCervejaByNome(nome):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
+def SelectCervejaByIdBar(id):
+    try:
+        sqliteConnection = sqlite3.connect(nomeBanco)
+        cursor = sqliteConnection.cursor()
+        sqlite_select_query = """SELECT * FROM BAR where id = ?"""
+       
+        cursor.execute(sqlite_select_query,(id,))
+        sqliteConnection.commit()
+        records = cursor.fetchall()
+
+        listacervejas = []
+        for row in records:
+            item = [row[0],row[1], row[2], row[3], row[4], row[5]]
+            listacervejas.append(item)
+    
+        cursor.close()
+        return listacervejas
+
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+
 def SelectCervejaByUsuario(nome_usuario):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
@@ -283,25 +304,30 @@ def AtualizaTrocaCervejas(nomeBanco,id_troca,novoStatus):
 
 
 
-def InicializaBD():    
+def InicializaBD():
     try:
-        sqlite3.connect('file:TPSD.db?mode=rw', uri=True)
-       
-    except:
-        createDB("TPSD")
-        CreateTableBar(nomeBanco)
-        CreateTableUsuario(nomeBanco)
-        CreateTableTrocas(nomeBanco)
-        InsertUsuario(nomeBanco,"claudio","0")
-        InsertUsuario(nomeBanco,"aryel","1")
-        InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
-        InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
-        InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
-        SelectTodasCervejas()
-        InsertTrocaCervejas(nomeBanco,1,2,"claudio","aryel")
-        trocasPendentes = SelectTrocas("p")
-        print("trocas pendentes", trocasPendentes)
-        #trocasAceitas = SelectTrocas("a")
+
+        try:
+            sqlite3.connect('file:TPSD.db?mode=rw', uri=True)
+        
+        except:
+            createDB("TPSD")
+            CreateTableBar(nomeBanco)
+            CreateTableUsuario(nomeBanco)
+            CreateTableTrocas(nomeBanco)
+            InsertUsuario(nomeBanco,"claudio","0")
+            InsertUsuario(nomeBanco,"aryel","1")
+            InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
+            InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
+            InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
+            SelectTodasCervejas()
+            InsertTrocaCervejas(nomeBanco,1,2,"claudio","aryel")
+            trocasPendentes = SelectTrocas("p")
+            print("trocas pendentes", trocasPendentes)
+            #trocasAceitas = SelectTrocas("a")
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+
 
 def TesteBD():
     teste = SelectTodosUsuarios(nomeBanco)

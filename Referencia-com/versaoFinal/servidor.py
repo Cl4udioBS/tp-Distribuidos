@@ -2,7 +2,7 @@ import socket
 import threading
 import rns
 from entidades import cliente as c
-
+from entidades import database as db
 HOST = 'localhost';
 PORT = 7777;
 
@@ -14,6 +14,8 @@ def main():
         servidor.bind((HOST,PORT));
         servidor.listen();
         print("SERVIDOR::Ativo!\n");
+        db.InicializaBD()
+        
     except:
         return print("SERVIDOR::Falha na inicialização!\n");
 
