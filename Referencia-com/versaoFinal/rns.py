@@ -14,7 +14,8 @@ def boasVindas(cliente):
     if valido == 'T':
         try:
             cliente.send(f'(SERVIDOR) {nome}, vamos as trocas?!'.encode('utf-8'))
-            listagemDeitens(cliente, nome)
+            #listagemDeitens(cliente, nome)
+            SolicitaTroca(cliente,nome)
             
             #RESTO DA LOGICA
 
@@ -49,18 +50,60 @@ def cadastroUsuario(nome, cliente):
     cliente.send(f'(SERVIDOR) Usuario < {nome} > inserido com sucesso!'.encode('utf-8'))
     
 
-def listagemDeitens(cliente, nome):
+def listagemDeitensTroca(cliente, nome):
     dadosListagem = [ ]
     try:
         cliente.send(f'(SERVIDOR) < {nome} > Confira as cervejas disponiveis \n\tem nosso BAR'.encode('utf-8'))
-        cliente.send(f'(SERVIDOR)[PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
+        cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
         dadosListagem = database.SelectTodasCervejas()
         if (len(dadosListagem) > 0):
             for breja in dadosListagem:
-                if (breja[0]!=nome):
-                    cliente.send(f'\n||PROPRIETARIO: {breja[0]} ||CERVEJA: {breja[1]} ||ABV: {breja[2]} ||IBU: {breja[3]} ||ESTILO:{breja[4]} ||'.encode('utf-8'))
+               
+                if (breja[1]!=nome):
+                    cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
             cliente.send(f'\n(SERVIDOR) < {nome} > E ai?! Vai querer?'.encode('utf-8'))
+            cliente.send(f'\n(SERVIDOR)[Bora] [Voltar]'.encode('utf-8'))
+            
+            resposta = input('\n>')
+            
+            if(resposta.lower() == "bora"):
+                cliente.send(resposta.encode('utf-8'))
+            else:
+                return 0
         else:
            cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
+    except:
+        print("Error: Sorry :/")
+
+def listagemMeusItens(cliente, nome):
+    dadosListagem = [ ]
+    try:
+        cliente.send(f'(SERVIDOR) < {nome} > Essas são as cervejas que você cadastrou \n\tem nosso BAR'.encode('utf-8'))
+        cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
+        dadosListagem = database.SelectTodasCervejas()
+        if (len(dadosListagem) > 0):
+            for breja in dadosListagem:
+                if (breja[1]==nome):
+                    cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
+        else:
+           cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
+           return 0
+        return 1
+    except:
+        print("Error: Sorry :/")
+
+def SolicitaTroca(cliente, nome):
+    
+    try:
+        res = listagemDeitensTroca(cliente, nome)
+        print("res: ",res)
+        if(res == 1):
+            cliente.send(f'\n(SERVIDOR) < {nome} > Incrivel, vou te mostrar as cervejas que você tem para oferecer numa troca!'.encode('utf-8'))
+            listagemMeusItens(cliente,nome)
+            cliente.send(f'\n(SERVIDOR) < {nome} > Agora você tem todas as informações para efetuar uma troca, vamos lá?!'.encode('utf-8'))
+            cliente.send(f'\n(SERVIDOR) < {nome} > Escolha primeiro a cerveja que você deseja solicitar!'.encode('utf-8'))
+            cliente.send(f'\n(SERVIDOR) < {nome} > É só digitar o indice da desejada'.encode('utf-8'))
+
+
     except:
         print("Error: Sorry :/")
