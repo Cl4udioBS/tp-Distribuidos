@@ -4,7 +4,7 @@ import sqlite3
 
 
 
-###RF01
+
 def enviaMsgServ(msg, cliente):
     try:
         cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
@@ -23,8 +23,17 @@ def recebeMsgServ(cliente):
         
 
 
-def menuTrocas(cliente, clientesAtivos, nome):
-    pass
+def menuTrocas(cliente):
+    enviaMsgServ('\t =======================================',cliente);
+    enviaMsgServ('\t OPCOES:\t=========================',cliente);
+    enviaMsgServ('\t 1:Solicitar troca                  \t=',cliente);
+    enviaMsgServ('\t 2:Cadastrar cerveja                \t=',cliente);
+    enviaMsgServ('\t 3:Ver sua Geladeira(Itens)         \t=',cliente);
+    enviaMsgServ('\t 4:Aceitar/Recusar trocas           \t=',cliente);
+    enviaMsgServ('\t 5:Kero Sair                        \t=',cliente);
+    enviaMsgServ('\t =======================================',cliente);
+    enviaMsgServ('\n\t = ESCOLHA UMA DAS OPCOES (EX.: 4) =\t\t=',cliente);
+    
 
 
 def boasVindas(cliente, clientesAtivos):
@@ -34,40 +43,55 @@ def boasVindas(cliente, clientesAtivos):
     valido = autenticacao(nome.lower());
     if valido == 'T':
         try:
-            enviaMsgServ(f' {nome}, vamos as trocas?!',cliente)
-            #listagemDeitens(cliente, nome)
-            #SolicitaTroca(cliente,nome)
-            transmissao(cliente, clientesAtivos, nome)
-            
-            
-            #RESTO DA LOGICA
+            while (True):
+                enviaMsgServ(f' {nome}, vamos as trocas?!\n',cliente)
+                transmissao(cliente, clientesAtivos, nome)
+                menuTrocas(cliente)
+                resp = recebeMsgServ(cliente)
+                if (resp == '1'):
+                    SolicitaTroca(cliente,nome)
+                elif (resp == '2'):
+                    CadastrarCerveja(cliente, nome)
+                elif (resp == '3'):
+                    listagemMeusItens(cliente, nome)
+                elif (resp == '4'):
+                    pass
+                    #aryel esta fazendo
+                else:
+                    enviaMsgServ('Tchau!!!!',cliente)
+                    cliente.close
+                    return
+
 
         except:
             print('Usuario fora do Sistema!')
     else:
-        enviaMsgServ(f'(SERVIDOR){nome} => Não cadastrado !!!!', cliente)
+        enviaMsgServ(f'{nome} => Não cadastrado !!!!', cliente)
         enviaMsgServ('Deseja realizar cadastro? \n(K)ero\t(N)ao', cliente)      
         resposta = recebeMsgServ(cliente).lower();
         if (resposta == 'k'):
             cadastroUsuario(nome,cliente)
         else:            
-            enviaMsgServ(f'(SERVIDOR) {nome}?! Sem cadastro, sem cerveja!', cliente)
+            enviaMsgServ(f'{nome}?! Sem cadastro, sem cerveja!', cliente)
+            enviaMsgServ('Voltando ao MENU PRINCIPAL ...\n', cliente)
             return           
 
 def transmissao(cliente, clientesAtivos, nome): #verificar online
     trocasAtivas = database.SelectTrocas('p')
     for clienteA in clientesAtivos:
         if (clienteA == cliente):
+            enviaMsgServ('\t:)\tVOCÊ TEM TROCAS PENDENTES !!', cliente);
             for trocas in trocasAtivas:
                 if trocas[3] == nome:
                     try:
-                        clienteA.send(f'\n(SERVIDOR) Trocas pendentes: {trocas}'.encode('utf-8'));
+                        enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
                     except:
                         deletaCliente(clienteA,clientesAtivos);
 
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
 
+###RF01
 def autenticacao(nome):
     dadosLogin = [ ]
     try:
@@ -83,7 +107,7 @@ def autenticacao(nome):
 def cadastroUsuario(nome, cliente):
     database.InsertUsuario('TPSD.db',nome, '1234')
     print(f'Usuario {nome} inserido com sucesso!')
-    cliente.send(f'(SERVIDOR) Usuario < {nome} > inserido com sucesso!'.encode('utf-8'))
+    enviaMsgServ(f'Usuario < {nome} > inserido com sucesso!',cliente)
     
 
 def listagemDeitensTroca(cliente, nome):

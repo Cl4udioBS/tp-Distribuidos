@@ -28,7 +28,7 @@ def recebeMensagens(cliente):
     while True:
         try:
             msg = cliente.recv(2048).decode('utf-8'); #socket transmite em bytes
-            print(msg+'\n');
+            print(msg);
         except:
             print('\nFalha na conexão com o servidor!');
             print('<Enter> para sair');
