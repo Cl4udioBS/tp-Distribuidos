@@ -1,6 +1,6 @@
 import socket
 import threading
-import logar
+import rns
 from entidades import cliente as c
 
 HOST = 'localhost';
@@ -26,8 +26,8 @@ def main():
 def tratamentoDeMensagens(cliente):
     while True:
         try:
-            logar.boasVindas(cliente);
-            cliente.send(f'{ msg }'.encode('utf-8'));
+            rns.boasVindas(cliente);
+            #cliente.send(f'{ msg }'.encode('utf-8'));
             c.recebeMensagens(cliente);
 
         except:
@@ -45,5 +45,6 @@ def transmissao(cliente): #verificar online
 
 def deletaCliente(cliente):
     clientesAtivos.remove(cliente);
+
 
 main();
