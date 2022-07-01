@@ -1,5 +1,6 @@
 import sqlite3
 
+
 nomeBanco = "TPSD.db"
 
 ##Criação, colocar script para fazer esses só no primeiro

@@ -2,6 +2,7 @@ import socket
 import threading
 import rns
 from entidades import cliente as c
+import time
 
 HOST = 'localhost';
 PORT = 7777;
@@ -22,6 +23,7 @@ def main():
         clientesAtivos.append(cliente);
         thread = threading.Thread(target=tratamentoDeMensagens, args= [cliente]);
         thread.start();
+        print("Clientes Online:\n",clientesAtivos)
 
 def tratamentoDeMensagens(cliente):
     while True:

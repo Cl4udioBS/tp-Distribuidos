@@ -3,6 +3,7 @@ import sqlite3
 
 
 
+
 ###RF01
 
 def boasVindas(cliente):
@@ -13,19 +14,21 @@ def boasVindas(cliente):
     if valido == 'T':
         try:
             cliente.send(f'(SERVIDOR) {nome}, vamos as trocas?!'.encode('utf-8'))
+            listagemDeitens(cliente, nome)
             
             #RESTO DA LOGICA
 
         except:
             print('Usuario fora do Sistema!')
     else:
-        cliente.send(f'(SERVIDOR) {nome}=> Não cadastrado !!!!\nDeseja realizar cadastro?'.encode('utf-8'))      
+        cliente.send(f'(SERVIDOR) {nome}=> Não cadastrado !!!!\nDeseja realizar cadastro?'+
+                                            '\n(S)im\t(N)ao'.encode('utf-8'))      
         resposta = (cliente.recv(2048).decode('utf-8')).lower();
         if (resposta == 's'):
             cadastroUsuario(nome,cliente)
         else:            
             cliente.send(f'(SERVIDOR) {nome} Sem cadastro, sem cerveja!'.encode('utf-8'))
-            cliente.close()
+            cliente.close()            
 
 
 def autenticacao(nome):
@@ -46,51 +49,18 @@ def cadastroUsuario(nome, cliente):
     cliente.send(f'(SERVIDOR) Usuario < {nome} > inserido com sucesso!'.encode('utf-8'))
     
 
-
-'''
-
-def listagemDeitens(nome):
-    dadosLogin = [ ]
-    try:         
-        sqliteConnection = sqlite3.connect('TPSD.db')
-        cursor = sqliteConnection.cursor()
-        
-        cursor.execute("SELECT * from Usuarios");
-        records = cursor.fetchall()
-        for row in records:
-            #print("nome: ",row[0]) #RETIRAR
-            dadosLogin.append(row[0].strip())
-        cursor.close()
-        #redeUsuarios = dadosLogin
-
-        dadosLogin = SelectTodosUsuarios(TPSD.db)
-        cadastro = "F"
-
-        for check in dadosLogin:
-            if (check == nome):
-                cadastro = 'T'
-        return cadastro
-    except sqlite3.Error as error:
-        print("Error while connecting to sqlite", error)
-
-def trocaDeitens(nome):
-    dadosLogin = [ ]
-    try:         
-        sqliteConnection = sqlite3.connect('TPSD.db')
-        cursor = sqliteConnection.cursor()
-        cursor.execute("SELECT * from Usuarios");
-        records = cursor.fetchall()
-        for row in records:
-            #print("nome: ",row[0]) #RETIRAR
-            dadosLogin.append(row[0].strip())
-        cursor.close()
-        #redeUsuarios = dadosLogin
-        cadastro = "F"
-
-        for check in dadosLogin:
-            if (check == nome):
-                cadastro = 'T'
-        return cadastro
-    except sqlite3.Error as error:
-        print("Error while connecting to sqlite", error)
-        '''
+def listagemDeitens(cliente, nome):
+    dadosListagem = [ ]
+    try:
+        cliente.send(f'(SERVIDOR) < {nome} > Confira as cervejas disponiveis \n\tem nosso BAR'.encode('utf-8'))
+        cliente.send(f'(SERVIDOR)[PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
+        dadosListagem = database.SelectTodasCervejas()
+        if (len(dadosListagem) > 0):
+            for breja in dadosListagem:
+                if (breja[0]!=nome):
+                    cliente.send(f'\n||PROPRIETARIO: {breja[0]} ||CERVEJA: {breja[1]} ||ABV: {breja[2]} ||IBU: {breja[3]} ||ESTILO:{breja[4]} ||'.encode('utf-8'))
+            cliente.send(f'\n(SERVIDOR) < {nome} > E ai?! Vai querer?'.encode('utf-8'))
+        else:
+           cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
+    except:
+        print("Error: Sorry :/")
