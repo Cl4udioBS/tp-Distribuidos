@@ -64,10 +64,11 @@ def listagemDeitensTroca(cliente, nome):
             cliente.send(f'\n(SERVIDOR) < {nome} > E ai?! Vai querer?'.encode('utf-8'))
             cliente.send(f'\n(SERVIDOR)[Bora] [Voltar]'.encode('utf-8'))
             
-            resposta = input('\n>')
+            resposta = cliente.recv(2048).decode('utf-8');
             
             if(resposta.lower() == "bora"):
-                cliente.send(resposta.encode('utf-8'))
+                return 1
+                #cliente.send(resposta.encode('utf-8'))
             else:
                 return 0
         else:

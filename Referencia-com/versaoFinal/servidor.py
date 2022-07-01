@@ -2,7 +2,6 @@ import socket
 import threading
 import rns
 from entidades import cliente as c
-import time
 
 HOST = 'localhost';
 PORT = 7777;
