@@ -22,32 +22,17 @@ def main():
     while True:
         cliente, endereco = servidor.accept();
         clientesAtivos.append(cliente);
-        thread = threading.Thread(target=tratamentoDeMensagens, args= [cliente]);
+        thread = threading.Thread(target=tratamentoDeMensagens, args= [cliente, clientesAtivos]);
         thread.start();
         print("Clientes Online:\n",clientesAtivos)
 
-def tratamentoDeMensagens(cliente):
+def tratamentoDeMensagens(cliente,clientesAtivos):
     while True:
         try:
-            rns.boasVindas(cliente);
-            #cliente.send(f'{ msg }'.encode('utf-8'));
-            c.recebeMensagens(cliente);
-
+            rns.boasVindas(cliente, clientesAtivos);
         except:
-            deletaCliente(cliente);
+            rns.deletaCliente(cliente, clientesAtivos);
             break;
-
-
-def transmissao(cliente): #verificar online
-    for clienteA in clientesAtivos:
-        if clienteA != cliente:
-            try:
-                clienteA.send('ping'.encode('utf-8'));
-            except:
-                deletaCliente(clienteA);
-
-def deletaCliente(cliente):
-    clientesAtivos.remove(cliente);
 
 
 main();

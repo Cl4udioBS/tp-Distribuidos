@@ -5,17 +5,39 @@ import sqlite3
 
 
 ###RF01
+def enviaMsgServ(msg, cliente):
+    try:
+        cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
+        print(f"\nMsg enviada para: {cliente}!\n")
+    except:
+        print('Falha no envio!\n');
+        cliente.close();
 
-def boasVindas(cliente):
-    cliente.send('\t\t BEM VINDO AO kERO - SEU SD DE TROCAS DE CERVEJA'.encode('utf-8'));
-    cliente.send('\n(SERVIDOR) Insira seu nome: '.encode('utf-8'));
-    nome = cliente.recv(2048).decode('utf-8');     
+def recebeMsgServ(cliente):
+    try:
+        msg = cliente.recv(2048).decode('utf-8'); #socket transmite em bytes
+        return msg
+    except:
+        print('\nFalha na conexão com o servidor!');
+        cliente.close();
+
+
+def menuTrocas(cliente, clientesAtivos, nome):
+    pass
+
+
+def boasVindas(cliente, clientesAtivos):
+    enviaMsgServ('\t\t BEM VINDO AO kERO - SEU SD DE TROCAS DE CERVEJA',cliente);
+    enviaMsgServ('Insira seu nome: ',cliente);
+    nome = recebeMsgServ(cliente);     
     valido = autenticacao(nome.lower());
     if valido == 'T':
         try:
-            cliente.send(f'(SERVIDOR) {nome}, vamos as trocas?!'.encode('utf-8'))
+            enviaMsgServ(f' {nome}, vamos as trocas?!',cliente)
             #listagemDeitens(cliente, nome)
-            SolicitaTroca(cliente,nome)
+            #SolicitaTroca(cliente,nome)
+            transmissao(cliente, clientesAtivos, nome)
+            
             
             #RESTO DA LOGICA
 
@@ -31,6 +53,19 @@ def boasVindas(cliente):
             cliente.send(f'(SERVIDOR) {nome} Sem cadastro, sem cerveja!'.encode('utf-8'))
             cliente.close()            
 
+def transmissao(cliente, clientesAtivos, nome): #verificar online
+    trocasAtivas = database.SelectTrocas('p')
+    for clienteA in clientesAtivos:
+        if (clienteA == cliente):
+            for trocas in trocasAtivas:
+                if trocas[3] == nome:
+                    try:
+                        clienteA.send(f'\n(SERVIDOR) Trocas pendentes: {trocas}'.encode('utf-8'));
+                    except:
+                        deletaCliente(clienteA,clientesAtivos);
+
+def deletaCliente(cliente, clientesAtivos):
+    clientesAtivos.remove(cliente);
 
 def autenticacao(nome):
     dadosLogin = [ ]
