@@ -18,8 +18,9 @@ def recebeMsgServ(cliente):
         msg = cliente.recv(2048).decode('utf-8'); #socket transmite em bytes
         return msg
     except:
-        print('\nFalha na conexão com o servidor!');
-        cliente.close();
+        print('\nFalha na conexão com o cliente!');
+        cliente.close()
+        
 
 
 def menuTrocas(cliente, clientesAtivos, nome):
@@ -44,14 +45,14 @@ def boasVindas(cliente, clientesAtivos):
         except:
             print('Usuario fora do Sistema!')
     else:
-        print("veio no else")
-        cliente.send(f'(SERVIDOR) {nome}, vamos as trocas?!'.encode('utf-8'))
-        resposta = (cliente.recv(2048).decode('utf-8')).lower();
-        if (resposta == 's'):
+        enviaMsgServ(f'(SERVIDOR){nome} => Não cadastrado !!!!', cliente)
+        enviaMsgServ('Deseja realizar cadastro? \n(K)ero\t(N)ao', cliente)      
+        resposta = recebeMsgServ(cliente).lower();
+        if (resposta == 'k'):
             cadastroUsuario(nome,cliente)
         else:            
-            cliente.send(f'(SERVIDOR) {nome} Sem cadastro, sem cerveja!'.encode('utf-8'))
-            cliente.close()            
+            enviaMsgServ(f'(SERVIDOR) {nome}?! Sem cadastro, sem cerveja!', cliente)
+            return           
 
 def transmissao(cliente, clientesAtivos, nome): #verificar online
     trocasAtivas = database.SelectTrocas('p')
