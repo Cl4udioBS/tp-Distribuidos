@@ -44,8 +44,8 @@ def boasVindas(cliente, clientesAtivos):
         except:
             print('Usuario fora do Sistema!')
     else:
-        cliente.send(f'(SERVIDOR) {nome}=> Não cadastrado !!!!\nDeseja realizar cadastro?'+
-                                            '\n(S)im\t(N)ao'.encode('utf-8'))      
+        print("veio no else")
+        cliente.send(f'(SERVIDOR) {nome}, vamos as trocas?!'.encode('utf-8'))
         resposta = (cliente.recv(2048).decode('utf-8')).lower();
         if (resposta == 's'):
             cadastroUsuario(nome,cliente)
@@ -116,17 +116,38 @@ def listagemMeusItens(cliente, nome):
     try:
         cliente.send(f'(SERVIDOR) < {nome} > Essas são as cervejas que você cadastrou \n\tem nosso BAR'.encode('utf-8'))
         cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
-        dadosListagem = database.SelectTodasCervejas()
+        dadosListagem = database.SelectCervejaByUsuario(nome)
         if (len(dadosListagem) > 0):
             for breja in dadosListagem:
-                if (breja[1]==nome):
-                    cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
+                cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
+            return 1        
         else:
-           cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
-           return 0
-        return 1
+            cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem itens cadastrados'.encode('utf-8'))
+            return 0
+            #tratar a votla
     except:
         print("Error: Sorry :/")
+
+
+def CadastrarCerveja(cliente, nome):
+    cliente.send(f'\n(SERVIDOR) < {nome} > Vamos cadastrar uma cerveja'.encode('utf-8'))
+    cliente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
+    nomeCerveja = cliente.recv(2048).decode('utf-8');
+    cliente.send(f'\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar)'
+    .encode('utf-8'))
+    abv = cliente.recv(2048).decode('utf-8');
+    cliente.send(f'\nAgora digite o IBU (IBU é a sigla para International Bitterness Units, ou o quão amargo é um exemplar)'
+    .encode('utf-8'))
+    ibu = cliente.recv(2048).decode('utf-8');
+    cliente.send(f'\nTa quaaaase! Digite agora o estilo'.encode('utf-8'))
+    estilo = cliente.recv(2048).decode('utf-8');
+    cliente.send(f'\nConfirma as informações pra gente?'.encode('utf-8'))
+    cliente.send(f'\nnome: {nomeCerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}'.encode('utf-8'))
+    cliente.send(f'\n[S] [N]'.encode('utf-8'))
+    cadastrar = cliente.recv(2048).decode('utf-8')
+    database.InsertCervejaBar("TPSD.db",nome,nomeCerveja,abv,ibu,estilo)
+     
+
 
 def SolicitaTroca(cliente, nome):
     
@@ -140,28 +161,37 @@ def SolicitaTroca(cliente, nome):
             if(indiceExec!=0):
                 cliente.send(f'\n(SERVIDOR) < {nome} > Incrivel, vou te mostrar as cervejas que você tem para oferecer numa troca!'
                 .encode('utf-8'))
-                listagemMeusItens(cliente,nome)
-                cliente.send(f'\n(SERVIDOR) < {nome} > Agora só escolher o indice da cerveja que você deseja dar em troca'.encode('utf-8'))
-                indiceSolic = cliente.recv(2048).decode('utf-8');
-                dadosCervExec = database.SelectCervejaByIdBar(indiceExec)
-                dadosCervSolic = database.SelectCervejaByIdBar(indiceSolic)
-                if(indiceSolic!=0):
-                    cliente.send(f'\n(SERVIDOR) < {nome} > Confirmar troca da cerveja'.encode('utf-8'))
-                    for breja in dadosCervSolic:
-                        solicitante = breja[1]
-                        cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
-                    cliente.send(f'\n(SERVIDOR) < {nome} > Pela cerveja'.encode('utf-8'))
-                    for breja2 in dadosCervExec:
-                        executor = breja[2]
-                        cliente.send(f'\n||Indice: {breja2[0]} ||PROPRIETARIO: {breja2[1]} ||CERVEJA: {breja2[2]} ||ABV: {breja2[3]} ||IBU: {breja2[4]} ||ESTILO:{breja2[5]} ||'.encode('utf-8'))
-                    cliente.send(f'\n(SERVIDOR) < {nome} >[Sim] [Não]'.encode('utf-8'))
-                    confirm = cliente.recv(2048).decode('utf-8');
+                tenhoItens = listagemMeusItens(cliente,nome)
+                if(tenhoItens == 1):
 
-            if(confirm.lower() == 'sim'):
-                cliente.send(f'\n(SERVIDOR) < {nome} >Troca solicitada, em breve você receberá o veredito'.encode('utf-8'))
-                database.InsertTrocaCervejas("TPSD.db",indiceSolic,indiceExec,solicitante,executor)
-                database.SelectTodasCervejas()
-          
+                    cliente.send(f'\n(SERVIDOR) < {nome} > Agora só escolher o indice da cerveja que você deseja dar em troca'.encode('utf-8'))
+                    indiceSolic = cliente.recv(2048).decode('utf-8');
+                    dadosCervExec = database.SelectCervejaByIdBar(indiceExec)
+                    dadosCervSolic = database.SelectCervejaByIdBar(indiceSolic)
+                    if(indiceSolic!=0):
+                        cliente.send(f'\n(SERVIDOR) < {nome} > Confirmar troca da cerveja'.encode('utf-8'))
+                        for breja in dadosCervSolic:
+                            solicitante = breja[1]
+                            cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
+                        cliente.send(f'\n(SERVIDOR) < {nome} > Pela cerveja'.encode('utf-8'))
+                        for breja2 in dadosCervExec:
+                            executor = breja[1]
+                            cliente.send(f'\n||Indice: {breja2[0]} ||PROPRIETARIO: {breja2[1]} ||CERVEJA: {breja2[2]} ||ABV: {breja2[3]} ||IBU: {breja2[4]} ||ESTILO:{breja2[5]} ||'.encode('utf-8'))
+                        cliente.send(f'\n(SERVIDOR) < {nome} >[Sim] [Não]'.encode('utf-8'))
+                        confirm = cliente.recv(2048).decode('utf-8');
+
+                        if(confirm.lower() == 'sim'):
+                            cliente.send(f'\n(SERVIDOR) < {nome} >Troca solicitada, em breve você receberá o veredito'.encode('utf-8'))
+                            database.InsertTrocaCervejas("TPSD.db",indiceSolic,indiceExec,solicitante,executor)
+                            database.SelectTodasCervejas()
+                
+                else:
+                    cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem nenhuma cerveja cadastrada deseja cadastrar?'.encode('utf-8'))
+                    cliente.send(f'\n(SERVIDOR) < {nome} >[S] [N]'.encode('utf-8'))
+                    cadastrar = cliente.recv(2048).decode('utf-8')
+                    if(cadastrar.lower() == 's'):
+                        CadastrarCerveja(cliente, nome)
+        
 
     except:
         print("Error: Sorry :/")

@@ -100,7 +100,9 @@ def InsertUsuario(nomeBanco,nome, senha):
         print("Error while connecting to sqlite", error)
 
 def InsertCervejaBar(nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo):
+    print("dados chegando: ",nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo)
     try:
+        print("veio banco")
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
         sqlite_insert_query = """INSERT INTO BAR
@@ -319,7 +321,7 @@ def InicializaBD():
             InsertUsuario(nomeBanco,"aryel","1")
             InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
             InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
-            InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
+            #InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
             SelectTodasCervejas()
             InsertTrocaCervejas(nomeBanco,1,2,"claudio","aryel")
             trocasPendentes = SelectTrocas("p")
