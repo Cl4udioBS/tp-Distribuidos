@@ -14,12 +14,9 @@ def main():
     except:
         return print("Conexão indisponível...");
 
-    usuario = input('Usuario -> ');
-    print(usuario +'- STATUS: Conectado.');
-
     #threads:
     thread1 = threading.Thread(target=recebeMensagens, args = [ cliente ]);
-    thread2 = threading.Thread(target=enviaMensagens, args = [ cliente, usuario ]);
+    thread2 = threading.Thread(target=enviaMensagens, args = [ cliente]);
 
     thread1.start();
     thread2.start();

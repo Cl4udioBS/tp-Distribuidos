@@ -47,8 +47,8 @@ def CreateTableBar(nomeDb):
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 nome_usuario text,
                                 nome_cerveja text,
-                                abv  real,
-                                ibu integer,
+                                abv  text,
+                                ibu text,
                                 estilo text,
                                 FOREIGN KEY(nome_usuario) REFERENCES Usuarios(nome)
                                 );'''
@@ -361,14 +361,12 @@ def InicializaBD():
             InsertUsuario(nomeBanco,"aryel","1")
             InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
             InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
-            #InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
+            InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
             SelectTodasCervejas()
-           
+            InsertTrocaCervejas(nomeBanco, 3, 1, "aryel", "claudio")           
             trocasPendentes = SelectTrocas("p")
             print("trocas pendentes", trocasPendentes)
-            trocasClaudio = SelectTrocasByUsrExec("aryel")
-            print("Trocas Claudio: ",trocasClaudio)
-            #trocasAceitas = SelectTrocas("a")
+
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 

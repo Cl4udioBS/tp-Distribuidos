@@ -1,9 +1,6 @@
 from entidades import database
 import sqlite3
 
-
-
-
 def enviaMsgServ(msg, cliente):
     try:
         cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
@@ -23,14 +20,14 @@ def recebeMsgServ(cliente):
 
 
 def menuTrocas(cliente):
-    enviaMsgServ('\t =======================================',cliente);
+    enviaMsgServ('\t ========================================',cliente);
     enviaMsgServ('\t OPCOES:\t=========================',cliente);
     enviaMsgServ('\t 1:Solicitar troca                  \t=',cliente);
     enviaMsgServ('\t 2:Cadastrar cerveja                \t=',cliente);
     enviaMsgServ('\t 3:Ver sua Geladeira(Itens)         \t=',cliente);
     enviaMsgServ('\t 4:Aceitar/Recusar trocas           \t=',cliente);
     enviaMsgServ('\t 5:Kero Sair                        \t=',cliente);
-    enviaMsgServ('\t =======================================',cliente);
+    enviaMsgServ('\t ========================================',cliente);
     enviaMsgServ('\n\t = ESCOLHA UMA DAS OPCOES (EX.: 4) =\t\t=',cliente);
 
 
@@ -71,18 +68,20 @@ def boasVindas(cliente, clientesAtivos):
             return           
 
 def transmissao(cliente, clientesAtivos, nome): #verificar online
+    flag=0
     trocasAtivas = database.SelectTrocas('p')
     for clienteA in clientesAtivos:
         if (clienteA == cliente):
             enviaMsgServ('\t:)\tTROCAS PENDENTES:', cliente);
             for trocas in trocasAtivas:
                 if trocas[4] == nome:
+                    flag = 1
                     try:
                        enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
                     except:
                         deletaCliente(clienteA,clientesAtivos);
-                else:
-                    enviaMsgServ("Sua geladeira está vazia...\t:/ ", cliente);
+    if(flag==0):
+        enviaMsgServ(":/\tSua geladeira está vazia...\t:/ ",cliente);
 
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
@@ -123,7 +122,6 @@ def listagemDeitensTroca(cliente, nome):
             
             if(resposta.lower() == "bora"):
                 return 1
-                #cliente.send(resposta.encode('utf-8'))
             else:
                 return 0
         else:
@@ -144,7 +142,6 @@ def listagemMeusItens(cliente, nome):
         else:
             cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem itens cadastrados'.encode('utf-8'))
             return 0
-            #tratar a votla
     except:
         print("Error: Sorry :/")
 
