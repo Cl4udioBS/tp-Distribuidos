@@ -174,6 +174,30 @@ def SelectTrocas(status):
         listaUsuarios = []
         for row in records:
             troca = [row[0],row[1], row[2], row[3], row[4], row[5]]
+            print("row 4: ", row[4])
+            listaUsuarios.append(troca)
+    
+        cursor.close()
+        return listaUsuarios
+
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+
+def SelectTrocasByUsrExec(nome):
+    print("select trocas exec",nome)
+    try:
+        sqliteConnection = sqlite3.connect(nomeBanco)
+        cursor = sqliteConnection.cursor()
+        sqlite_select_query = """SELECT * FROM TrocaCerveja where nome_usr_executor = ? and status = p"""
+        data = (nome,)
+        cursor.execute(sqlite_select_query,data)
+        sqliteConnection.commit()
+        records = cursor.fetchall()
+
+        listaUsuarios = []
+        print("records: ", records)
+        for row in records:
+            troca = [row[0],row[1], row[2], row[3], row[4], row[5]]
             listaUsuarios.append(troca)
     
         cursor.close()
@@ -269,6 +293,7 @@ def SelectCervejaByIdBar(id):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
+
 def SelectCervejaByUsuario(nome_usuario):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
@@ -304,6 +329,21 @@ def AtualizaTrocaCervejas(nomeBanco,id_troca,novoStatus):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
+def TrocaTitularidade(nomeBanco, nomeNovoDono,indice):
+    try:
+        sqliteConnection = sqlite3.connect(nomeBanco)
+        cursor = sqliteConnection.cursor()
+        sqlite_insert_query = """Update Bar set nome_usuario = ? where id = ?"""
+        data = (nomeNovoDono,indice)
+        cursor.execute(sqlite_insert_query,data)
+        sqliteConnection.commit()
+        print("Troca atualizada com sucesso", cursor.rowcount)
+        cursor.close()
+    
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+
+
 
 
 def InicializaBD():
@@ -323,9 +363,11 @@ def InicializaBD():
             InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
             #InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
             SelectTodasCervejas()
-            InsertTrocaCervejas(nomeBanco,1,2,"claudio","aryel")
+           
             trocasPendentes = SelectTrocas("p")
             print("trocas pendentes", trocasPendentes)
+            trocasClaudio = SelectTrocasByUsrExec("aryel")
+            print("Trocas Claudio: ",trocasClaudio)
             #trocasAceitas = SelectTrocas("a")
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)

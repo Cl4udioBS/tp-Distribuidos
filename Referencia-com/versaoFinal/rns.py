@@ -4,7 +4,6 @@ import sqlite3
 
 
 
-
 def enviaMsgServ(msg, cliente):
     try:
         cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
@@ -33,7 +32,6 @@ def menuTrocas(cliente):
     enviaMsgServ('\t 5:Kero Sair                        \t=',cliente);
     enviaMsgServ('\t =======================================',cliente);
     enviaMsgServ('\n\t = ESCOLHA UMA DAS OPCOES (EX.: 4) =\t\t=',cliente);
-    
 
 
 def boasVindas(cliente, clientesAtivos):
@@ -55,13 +53,15 @@ def boasVindas(cliente, clientesAtivos):
                 elif (resp == '3'):
                     listagemMeusItens(cliente, nome)
                 elif (resp == '4'):
-                    pass
-                    #aryel esta fazendo
+                    ListarTrocasPendentes(cliente,nome)
+                    
                 else:
                     enviaMsgServ('Tchau!!!!',cliente)
                     cliente.close
                     return
-
+            
+            
+            #RESTO DA LOGICA
 
         except:
             print('Usuario fora do Sistema!')
@@ -82,16 +82,15 @@ def transmissao(cliente, clientesAtivos, nome): #verificar online
         if (clienteA == cliente):
             enviaMsgServ('\t:)\tVOCÊ TEM TROCAS PENDENTES !!', cliente);
             for trocas in trocasAtivas:
-                if trocas[3] == nome:
+                if trocas[4] == nome:
                     try:
-                        enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
+                       enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
                     except:
                         deletaCliente(clienteA,clientesAtivos);
 
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
 
-###RF01
 def autenticacao(nome):
     dadosLogin = [ ]
     try:
@@ -200,7 +199,7 @@ def SolicitaTroca(cliente, nome):
                             cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
                         cliente.send(f'\n(SERVIDOR) < {nome} > Pela cerveja'.encode('utf-8'))
                         for breja2 in dadosCervExec:
-                            executor = breja[1]
+                            executor = breja2[1]
                             cliente.send(f'\n||Indice: {breja2[0]} ||PROPRIETARIO: {breja2[1]} ||CERVEJA: {breja2[2]} ||ABV: {breja2[3]} ||IBU: {breja2[4]} ||ESTILO:{breja2[5]} ||'.encode('utf-8'))
                         cliente.send(f'\n(SERVIDOR) < {nome} >[Sim] [Não]'.encode('utf-8'))
                         confirm = cliente.recv(2048).decode('utf-8');
@@ -220,3 +219,66 @@ def SolicitaTroca(cliente, nome):
 
     except:
         print("Error: Sorry :/")
+
+def ListarTrocasPendentes(cliente,nome):
+    trocas = database.SelectTrocas("p")
+    if(len(trocas)>0):
+        enviaMsgServ(f"\tEssas são as trocas pendentes do {nome}: ", cliente)   
+        for troca in trocas:
+            if troca[4] == nome:
+                try:
+                    cervejaSolict = database.SelectCervejaByIdBar(troca[1])
+                    cervejaExec = database.SelectCervejaByIdBar(troca[2])
+                    enviaMsgServ(f"|| Indice: {troca[0]} ||",cliente)
+                    enviaMsgServ(f"|| Cerveja oferecida: {cervejaSolict} ||",cliente)
+                    enviaMsgServ(f"|| Cerveja solicitada: {cervejaExec} ||",cliente)
+                except:
+                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
+
+        enviaMsgServ(f"Deseja Responder alguma solicitação?",cliente)
+        enviaMsgServ(f"[Kero(1)] [Agora não(0)]",cliente)
+        resposta = recebeMsgServ(cliente)
+        if(resposta == 1):
+            enviaMsgServ(f"Agora digite o indice da troca que deseja responder",cliente)
+            index = recebeMsgServ(cliente)
+            enviaMsgServ(f"SHOW!Agora digite se deseja realizar a troca ou rejeitar a solicitação",cliente)
+            enviaMsgServ(f"[Kero(1)] [Rejeitar Solicitação(0)]",cliente)
+            rej = recebeMsgServ(cliente)
+            if(rej == 1):
+                try:
+                    database.AtualizaTrocaCervejas("TPSD.db",index,"a")
+                    enviaMsgServ(f"Troca foi aceita",cliente)
+                except:
+                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
+            else:
+                try:
+                    database.AtualizaTrocaCervejas("TPSD.db",index,"r")
+                    enviaMsgServ("Ok solicitação excluida")
+                except:
+                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
+
+        else:
+              enviaMsgServ("Ok retornando!!")
+
+
+           
+     
+def ListarTrocasPendentesUsr(cliente, nome):
+    trocas = database.SelectTrocasByUsrExec(nome)
+    if(len(trocas)>0):
+        enviaMsgServ("\tEssas são as trocas pendentes que você tem: ", cliente)
+        for troca in trocas:
+            cervejaSolict = database.SelectCervejaByIdBar(troca[1])
+            cervejaExec = database.SelectCervejaByIdBar(troca[2])
+           
+            cliente.send(f'\n|| oiIndice: {troca[0]} ||CERVEJA OFERECIDA: {cervejaSolict} ||CERVEJA SOLICITADA: {cervejaExec} '.encode('utf-8'))
+
+  
+    return
+
+def AceitaTroca(cliente, nome):
+    data
+    return
+
+def RejeitaTroca(cliente, nome):
+    return
