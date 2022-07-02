@@ -53,16 +53,11 @@ def boasVindas(cliente, clientesAtivos):
                 elif (resp == '3'):
                     listagemMeusItens(cliente, nome)
                 elif (resp == '4'):
-                    ListarTrocasPendentes(cliente,nome)
-                    
+                    ListarTrocasPendentes(cliente,nome)                    
                 else:
                     enviaMsgServ('Tchau!!!!',cliente)
                     cliente.close
                     return
-            
-            
-            #RESTO DA LOGICA
-
         except:
             print('Usuario fora do Sistema!')
     else:
@@ -233,18 +228,18 @@ def ListarTrocasPendentes(cliente,nome):
                     enviaMsgServ(f"|| Cerveja oferecida: {cervejaSolict} ||",cliente)
                     enviaMsgServ(f"|| Cerveja solicitada: {cervejaExec} ||",cliente)
                 except:
-                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
+                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!",cliente);
 
-        enviaMsgServ(f"Deseja Responder alguma solicitação?",cliente)
-        enviaMsgServ(f"[Kero(1)] [Agora não(0)]",cliente)
+        enviaMsgServ("Deseja Responder alguma solicitação?",cliente)
+        enviaMsgServ("[Kero(1)] [Agora não(0)]",cliente)
         resposta = recebeMsgServ(cliente)
-        if(resposta == 1):
+        if(resposta == '1'):
             enviaMsgServ(f"Agora digite o indice da troca que deseja responder",cliente)
             index = recebeMsgServ(cliente)
             enviaMsgServ(f"SHOW!Agora digite se deseja realizar a troca ou rejeitar a solicitação",cliente)
             enviaMsgServ(f"[Kero(1)] [Rejeitar Solicitação(0)]",cliente)
             rej = recebeMsgServ(cliente)
-            if(rej == 1):
+            if(rej == '1'):
                 try:
                     database.AtualizaTrocaCervejas("TPSD.db",index,"a")
                     enviaMsgServ(f"Troca foi aceita",cliente)
@@ -272,13 +267,4 @@ def ListarTrocasPendentesUsr(cliente, nome):
             cervejaExec = database.SelectCervejaByIdBar(troca[2])
            
             cliente.send(f'\n|| oiIndice: {troca[0]} ||CERVEJA OFERECIDA: {cervejaSolict} ||CERVEJA SOLICITADA: {cervejaExec} '.encode('utf-8'))
-
-  
-    return
-
-def AceitaTroca(cliente, nome):
-    data
-    return
-
-def RejeitaTroca(cliente, nome):
     return
