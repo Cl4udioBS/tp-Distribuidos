@@ -81,7 +81,7 @@ def transmissao(cliente, clientesAtivos, nome): #verificar online
                     except:
                         deletaCliente(clienteA,clientesAtivos);
     if(flag==0):
-        enviaMsgServ(":/\tSua geladeira está vazia...\t:/ ",cliente);
+        enviaMsgServ(":/\tSua geladeira de TROCAS está vazia...\t:/ ",cliente);
 
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
