@@ -33,10 +33,10 @@ def recebeMensagens(cliente):
             print('\nFalha na conexão com o servidor!');
             print('<Enter> para sair');
             cliente.close();
-            print('STATUS: Desconectado.'); ## ????????????????
+            print('STATUS: Desconectado.');
             break;
 
-def enviaMensagens(cliente, usuario):
+def enviaMensagens(cliente):
     while True:
         try:
             msg = input('\n>');

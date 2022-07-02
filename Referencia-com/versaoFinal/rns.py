@@ -56,7 +56,6 @@ def boasVindas(cliente, clientesAtivos):
                     ListarTrocasPendentes(cliente,nome)                    
                 else:
                     enviaMsgServ('Tchau!!!!',cliente)
-                    cliente.close
                     return
         except:
             print('Usuario fora do Sistema!')
@@ -75,13 +74,15 @@ def transmissao(cliente, clientesAtivos, nome): #verificar online
     trocasAtivas = database.SelectTrocas('p')
     for clienteA in clientesAtivos:
         if (clienteA == cliente):
-            enviaMsgServ('\t:)\tVOCÊ TEM TROCAS PENDENTES !!', cliente);
+            enviaMsgServ('\t:)\tTROCAS PENDENTES:', cliente);
             for trocas in trocasAtivas:
                 if trocas[4] == nome:
                     try:
                        enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
                     except:
                         deletaCliente(clienteA,clientesAtivos);
+                else:
+                    enviaMsgServ("Sua geladeira está vazia...\t:/ ", cliente);
 
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
