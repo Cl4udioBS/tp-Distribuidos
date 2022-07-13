@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package comunicacao;
+
+// The greeting service definition.
+service Comunicar {
+	// Comunicação dupla
+	rpc ComInterativa (stream MsgRequest) returns (stream MsgReply);
+}
+
+// The request message containing the user's name.
+message MsgRequest {
+  string nome = 1;
+  string mensagem = 2;
+}
+
+// The response message containing the greetings.
+message MsgReply {
+  string mensagem = 1;
+}
+
+message DelayedReply {
+	string mensagem = 1;
+	repeated MsgRequest requisicao = 2;
+}
