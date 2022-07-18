@@ -14,7 +14,7 @@ message MsgRequest {
   string mensagem = 2;
 }
 
-// The response message containing the greetings.
+// The response message containing the response.
 message MsgReply {
   string mensagem = 1;
 }
