@@ -86,14 +86,15 @@ def transmissao(cliente, clientesAtivos, nome): #verificar online
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
 
-def autenticacao(nome):
+def autenticacao(usuario):
     dadosLogin = [ ]
+    
     try:
         dadosLogin = database.SelectTodosUsuarios('TPSD.db')
         cadastro = "F"
         for check in dadosLogin:
-            if (check == nome):
-                cadastro = 'T'
+            if (check == usuario.nome):
+                cadastro = "T"
         return cadastro
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
