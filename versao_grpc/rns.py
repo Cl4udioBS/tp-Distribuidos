@@ -1,6 +1,8 @@
 from entidades import database
 import sqlite3
 
+
+
 def enviaMsgServ(msg, cliente):
     try:
         cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
@@ -92,8 +94,9 @@ def autenticacao(usuario):
     try:
         dadosLogin = database.SelectTodosUsuarios('TPSD.db')
         cadastro = "F"
+        print(usuario)
         for check in dadosLogin:
-            if (check == usuario.nome):
+            if (check == usuario):
                 cadastro = "T"
         return cadastro
     except sqlite3.Error as error:

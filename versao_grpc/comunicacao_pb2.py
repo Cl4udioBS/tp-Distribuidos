@@ -14,44 +14,34 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\",\n\nMsgRequest\x12\x0c\n\x04nome\x18\x01 \x01(\t\x12\x10\n\x08mensagem\x18\x02 \x01(\t\"\x1c\n\x08MsgReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t\"M\n\x0c\x44\x65layedReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t\x12+\n\nrequisicao\x18\x02 \x03(\x0b\x32\x17.comunicacao.MsgRequest2P\n\tComunicar\x12\x43\n\rComInterativa\x12\x17.comunicacao.MsgRequest\x1a\x15.comunicacao.MsgReply(\x01\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t2H\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReplyb\x06proto3')
 
 
 
-_MSGREQUEST = DESCRIPTOR.message_types_by_name['MsgRequest']
-_MSGREPLY = DESCRIPTOR.message_types_by_name['MsgReply']
-_DELAYEDREPLY = DESCRIPTOR.message_types_by_name['DelayedReply']
-MsgRequest = _reflection.GeneratedProtocolMessageType('MsgRequest', (_message.Message,), {
-  'DESCRIPTOR' : _MSGREQUEST,
+_LOGINREQUEST = DESCRIPTOR.message_types_by_name['LoginRequest']
+_LOGINREPLY = DESCRIPTOR.message_types_by_name['LoginReply']
+LoginRequest = _reflection.GeneratedProtocolMessageType('LoginRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINREQUEST,
   '__module__' : 'comunicacao_pb2'
-  # @@protoc_insertion_point(class_scope:comunicacao.MsgRequest)
+  # @@protoc_insertion_point(class_scope:comunicacao.LoginRequest)
   })
-_sym_db.RegisterMessage(MsgRequest)
+_sym_db.RegisterMessage(LoginRequest)
 
-MsgReply = _reflection.GeneratedProtocolMessageType('MsgReply', (_message.Message,), {
-  'DESCRIPTOR' : _MSGREPLY,
+LoginReply = _reflection.GeneratedProtocolMessageType('LoginReply', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINREPLY,
   '__module__' : 'comunicacao_pb2'
-  # @@protoc_insertion_point(class_scope:comunicacao.MsgReply)
+  # @@protoc_insertion_point(class_scope:comunicacao.LoginReply)
   })
-_sym_db.RegisterMessage(MsgReply)
-
-DelayedReply = _reflection.GeneratedProtocolMessageType('DelayedReply', (_message.Message,), {
-  'DESCRIPTOR' : _DELAYEDREPLY,
-  '__module__' : 'comunicacao_pb2'
-  # @@protoc_insertion_point(class_scope:comunicacao.DelayedReply)
-  })
-_sym_db.RegisterMessage(DelayedReply)
+_sym_db.RegisterMessage(LoginReply)
 
 _COMUNICAR = DESCRIPTOR.services_by_name['Comunicar']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _MSGREQUEST._serialized_start=34
-  _MSGREQUEST._serialized_end=78
-  _MSGREPLY._serialized_start=80
-  _MSGREPLY._serialized_end=108
-  _DELAYEDREPLY._serialized_start=110
-  _DELAYEDREPLY._serialized_end=187
-  _COMUNICAR._serialized_start=189
-  _COMUNICAR._serialized_end=269
+  _LOGINREQUEST._serialized_start=34
+  _LOGINREQUEST._serialized_end=65
+  _LOGINREPLY._serialized_start=67
+  _LOGINREPLY._serialized_end=96
+  _COMUNICAR._serialized_start=98
+  _COMUNICAR._serialized_end=170
 # @@protoc_insertion_point(module_scope)
