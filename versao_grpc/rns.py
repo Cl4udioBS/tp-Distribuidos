@@ -86,6 +86,8 @@ def transmissao(cliente, clientesAtivos, nome): #verificar online
 def deletaCliente(cliente, clientesAtivos):
     clientesAtivos.remove(cliente);
 
+
+####! Itens usados na parte 4####
 def autenticacao(usuario):
     dadosLogin = [ ]
     
@@ -99,19 +101,23 @@ def autenticacao(usuario):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
-def cadastroUsuario(nome, cliente):
-    database.InsertUsuario('TPSD.db',nome, '1234')
+def cadastroUsuario(nome):
+    response = database.InsertUsuario('TPSD.db',nome, '1234')
     print(f'Usuario {nome} inserido com sucesso!')
-    enviaMsgServ(f'Usuario < {nome} > inserido com sucesso!',cliente)
+    return response
+    
     
 
-def listagemDeitensTroca(cliente, nome):
+def listagemDeitensTroca():
     dadosListagem = [ ]
     try:
-        cliente.send(f'(SERVIDOR) < {nome} > Confira as cervejas disponiveis \n\tem nosso BAR'.encode('utf-8'))
-        cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
+        ##cliente.send(f'(SERVIDOR) < {nome} > Confira as cervejas disponiveis \n\tem nosso BAR'.encode('utf-8'))
+        ##cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
         dadosListagem = database.SelectTodasCervejas()
         if (len(dadosListagem) > 0):
+            return dadosListagem
+            #!MOVER PARA CLIENTE OU INTERFACE GRÁFICA
+            """
             for breja in dadosListagem:
                
                 if (breja[1]!=nome):
@@ -125,51 +131,67 @@ def listagemDeitensTroca(cliente, nome):
                 return 1
             else:
                 return 0
+                """
         else:
-           cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
+            return 404
+           #cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
     except:
         print("Error: Sorry :/")
 
-def listagemMeusItens(cliente, nome):
+def listagemMeusItens(nome):
     dadosListagem = [ ]
     try:
-        cliente.send(f'(SERVIDOR) < {nome} > Essas são as cervejas que você cadastrou \n\tem nosso BAR'.encode('utf-8'))
-        cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
+        #cliente.send(f'(SERVIDOR) < {nome} > Essas são as cervejas que você cadastrou \n\tem nosso BAR'.encode('utf-8'))
+        #cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
         dadosListagem = database.SelectCervejaByUsuario(nome)
         if (len(dadosListagem) > 0):
+            return dadosListagem
+            """
             for breja in dadosListagem:
                 cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
-            return 1        
+            return 1       
+            """ 
         else:
-            cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem itens cadastrados'.encode('utf-8'))
-            return 0
+            #cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem itens cadastrados'.encode('utf-8'))
+            return 400
     except:
         print("Error: Sorry :/")
+        return 400
 
 
-def CadastrarCerveja(cliente, nome):
-    cliente.send(f'\n(SERVIDOR) < {nome} > Vamos cadastrar uma cerveja'.encode('utf-8'))
-    cliente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
-    nomeCerveja = cliente.recv(2048).decode('utf-8');
-    cliente.send(f'\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar)'
-    .encode('utf-8'))
-    abv = cliente.recv(2048).decode('utf-8');
-    cliente.send(f'\nAgora digite o IBU (IBU é a sigla para International Bitterness Units, ou o quão amargo é um exemplar)'
-    .encode('utf-8'))
-    ibu = cliente.recv(2048).decode('utf-8');
-    cliente.send(f'\nTa quaaaase! Digite agora o estilo'.encode('utf-8'))
-    estilo = cliente.recv(2048).decode('utf-8');
-    cliente.send(f'\nConfirma as informações pra gente?'.encode('utf-8'))
-    cliente.send(f'\nnome: {nomeCerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}'.encode('utf-8'))
-    cliente.send(f'\n[S] [N]'.encode('utf-8'))
-    cadastrar = cliente.recv(2048).decode('utf-8')
+def CadastrarCerveja(nome,cerveja):
+    #cliente.send(f'\n(SERVIDOR) < {nome} > Vamos cadastrar uma cerveja'.encode('utf-8'))
+    c#liente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
+    nomeCerveja = cerveja.nomeCerveja
+    #cliente.send(f'\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar)'
+    #.encode('utf-8'))
+    abv = cerveja.abv
+    #cliente.send(f'\nAgora digite o IBU (IBU é a sigla para International Bitterness Units, ou o quão amargo é um exemplar)'
+    #.encode('utf-8'))
+    ibu = cerveja.ibu
+    #cliente.send(f'\nTa quaaaase! Digite agora o estilo'.encode('utf-8'))
+    estilo = cerveja.estilo
+    #cliente.send(f'\nConfirma as informações pra gente?'.encode('utf-8'))
+    #cliente.send(f'\nnome: {nomeCerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}'.encode('utf-8'))
+    #cliente.send(f'\n[S] [N]'.encode('utf-8'))
+    #cadastrar = cliente.recv(2048).decode('utf-8')
     database.InsertCervejaBar("TPSD.db",nome,nomeCerveja,abv,ibu,estilo)
      
 
 
-def SolicitaTroca(cliente, nome):
+def SolicitaTroca(indiceCervejaSolicit,indiceCervejaExec):
     
     try:
+        #!Validar se tem itens no cliente
+        dadosCervExec = database.SelectCervejaByIdBar(indiceCervejaExec)
+        dadosCervSolic = database.SelectCervejaByIdBar(indiceCervejaSolicit)
+        for breja in dadosCervSolic:
+            solicitante = breja[1]
+        for breja2 in dadosCervExec:
+            executor = breja2[1]
+        response = database.InsertTrocaCervejas("TPSD.db",indiceCervejaSolicit,indiceCervejaExec,solicitante,executor)
+        return response
+        """
         res = listagemDeitensTroca(cliente, nome)
         print("res: ",res)
         if(res == 1):
@@ -209,26 +231,39 @@ def SolicitaTroca(cliente, nome):
                     cadastrar = cliente.recv(2048).decode('utf-8')
                     if(cadastrar.lower() == 's'):
                         CadastrarCerveja(cliente, nome)
-        
+        """
 
     except:
         print("Error: Sorry :/")
+        response = 400
+
+
 
 def ListarTrocasPendentes(cliente,nome):
     trocas = database.SelectTrocas("p")
     if(len(trocas)>0):
-        enviaMsgServ(f"\tEssas são as trocas pendentes do {nome}: ", cliente)   
+        #enviaMsgServ(f"\tEssas são as trocas pendentes do {nome}: ", cliente)  
+        trocasRes = [] 
+        trocasAux = []
         for troca in trocas:
             if troca[4] == nome:
                 try:
+                    #!mudar para cliente
+                    '''                    
                     cervejaSolict = database.SelectCervejaByIdBar(troca[1])
                     cervejaExec = database.SelectCervejaByIdBar(troca[2])
+
                     enviaMsgServ(f"|| Indice: {troca[0]} ||",cliente)
                     enviaMsgServ(f"|| Cerveja oferecida: {cervejaSolict} ||",cliente)
                     enviaMsgServ(f"|| Cerveja solicitada: {cervejaExec} ||",cliente)
-                except:
-                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!",cliente);
+                    '''
 
+                    return troca
+                except:
+                    return 400
+                    #enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!",cliente);
+
+"""
         enviaMsgServ("Deseja Responder alguma solicitação?",cliente)
         enviaMsgServ("[Kero(1)] [Agora não(0)]",cliente)
         resposta = recebeMsgServ(cliente)
@@ -253,17 +288,39 @@ def ListarTrocasPendentes(cliente,nome):
 
         else:
               enviaMsgServ("Ok retornando!!")
+"""
 
+def responderSolicitacao(resSolicitacao,indiceTroca,solic,exec):
+    if(resSolicitacao == '1'):
+        try:
+            database.AceitaTroca("TPSD.db",indiceTroca,solic,exec)
+            troca = database.SelectTrocaById(indiceTroca)
+            #!generalizar depois
+            database.TrocaTitularidade("TPSD.db",solic,troca[0][2])
+            #enviaMsgServ(f"Troca foi aceita",cliente)
+            return 200
+        except:
+            return 400
+            #enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
+    else:
+        try:
+            database.RejeitaTroca("TPSD.db",indiceTroca,solic,exec)
+            return 200
+        except:
+            return 400
 
            
      
 def ListarTrocasPendentesUsr(cliente, nome):
     trocas = database.SelectTrocasByUsrExec(nome)
     if(len(trocas)>0):
+        return trocas
+        """
         enviaMsgServ("\tEssas são as trocas pendentes que você tem: ", cliente)
         for troca in trocas:
             cervejaSolict = database.SelectCervejaByIdBar(troca[1])
             cervejaExec = database.SelectCervejaByIdBar(troca[2])
            
             cliente.send(f'\n|| oiIndice: {troca[0]} ||CERVEJA OFERECIDA: {cervejaSolict} ||CERVEJA SOLICITADA: {cervejaExec} '.encode('utf-8'))
-    return
+        """
+    return 400
