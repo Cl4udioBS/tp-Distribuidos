@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t2H\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t2\x8f\x01\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x45\n\x0f\x43\x61\x64\x61stroUsuario\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReplyb\x06proto3')
 
 
 
@@ -42,6 +42,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LOGINREQUEST._serialized_end=65
   _LOGINREPLY._serialized_start=67
   _LOGINREPLY._serialized_end=96
-  _COMUNICAR._serialized_start=98
-  _COMUNICAR._serialized_end=170
+  _COMUNICAR._serialized_start=99
+  _COMUNICAR._serialized_end=242
 # @@protoc_insertion_point(module_scope)

@@ -4,8 +4,6 @@ import time
 import grpc
 import comunicacao_pb2
 import comunicacao_pb2_grpc
-import com2_pb2
-import com2_pb2_grpc
 import rns
 import cliente as c
 from entidades import database as db
@@ -18,7 +16,15 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         autenticacao = rns.autenticacao(request.usuario)
         print("tipo resposta autenticação: ", autenticacao)
         login.message = f"{autenticacao}"
-        return login    
+        return login 
+
+    def CadastroUsuario(self, request, context):
+        print("Request Cadastro")
+        cadastro = comunicacao_pb2.LoginReply()
+        fazerCadastro = rns.cadastroUsuario(request.usuario)
+        print("Resposta Cadastro: ", cadastro)
+        cadastro.message = f"{fazerCadastro}"
+        return cadastro 
     
 def servidor():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

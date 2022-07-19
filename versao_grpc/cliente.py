@@ -21,54 +21,47 @@ def run():
                 print("5:Kero Sair")
                 rpc_call = input(" ESCOLHA UMA DAS OPCOES:")
                 if rpc_call == "1":
-                    print("oi")
-                elif rpc_call == "2":
-                    hello_request = comunicacao_pb2.HelloRequest(greeting = "Bonjour", name = "YouTube")
-                    hello_replies = stub.ParrotSaysHello(hello_request)
-
-                    for hello_reply in hello_replies:
-                        print("ParrotSaysHello Response Received:")
-                        print(hello_reply)
-                elif rpc_call == "3":
-                    delayed_reply = stub.ChattyClientSaysHello(get_client_stream_requests())
-
-                    print("ChattyClientSaysHello Response Received:")
-                    print(delayed_reply)
-                elif rpc_call == "4":
-                    responses = stub.InteractingHello(get_client_stream_requests())
-
-                    for response in responses:
-                        print("InteractingHello Response Received: ")
-                        print(response)
+                    print("oi")                
                 elif rpc_call == "5":
                     print("Fechando")
                     break
 
             else:
-                sair = login(stub)
-                if (sair == 0):
+                conexaoLogin = login(stub)
+                conexaoCadastro = cadastroUsuario(stub)
+                if ((conexaoLogin | conexaoCadastro) == 0):
                     break
                 break
 
             
 def login(stub):
-    loop = "F"
-    while (loop == "F"):
-        print("\t EFETUAR LOGIN ==>")
-        print("Digite seu nome para fazer login")
-        print("")
-        print("ENTER p/ sair")
-
-
-        
-        n = input()
-        LoginRequest = comunicacao_pb2.LoginRequest(usuario = n)
-        loop  = (stub.Login(LoginRequest)).message
-        print("LOOP: ",loop)
-        if (n == ""):
-            return 0
+    print("\t EFETUAR LOGIN ==>")
+    print("Digite seu nome para fazer login")
+    print("")
+    print("ENTER p/ sair")        
+    n = input()
+    LoginRequest = comunicacao_pb2.LoginRequest(usuario = n)
+    usuarioNoSistema  = (stub.Login(LoginRequest)).message
+    if ((usuarioNoSistema != 'T') or (n == "")):
+        print("considere fazer cadastro")
+        return 0        
     print("Bem vindo(a): ", LoginRequest.usuario)
-    LOGADO = 1          
+    return 1
+
+def cadastroUsuario(stub):
+    print("\t EFETUAR CADASTRO ==>")
+    print("Digite seu nome para fazer CADASTRO")
+    print("")
+    print("ENTER p/ sair")      
+    n = input()
+    LoginRequest = comunicacao_pb2.LoginRequest(usuario = n)
+    if (n == ""):
+        return 0
+    usuarioNoSistema  = (stub.CadastroUsuario(LoginRequest)).message
+    print("LOOP: ", usuarioNoSistema)
+
+    print("Bem vindo(a): ", LoginRequest.usuario)
+    return 1        
            
 
 if __name__ == "__main__":

@@ -20,6 +20,11 @@ class ComunicarStub(object):
                 request_serializer=comunicacao__pb2.LoginRequest.SerializeToString,
                 response_deserializer=comunicacao__pb2.LoginReply.FromString,
                 )
+        self.CadastroUsuario = channel.unary_unary(
+                '/comunicacao.Comunicar/CadastroUsuario',
+                request_serializer=comunicacao__pb2.LoginRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.LoginReply.FromString,
+                )
 
 
 class ComunicarServicer(object):
@@ -33,11 +38,22 @@ class ComunicarServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CadastroUsuario(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ComunicarServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Login': grpc.unary_unary_rpc_method_handler(
                     servicer.Login,
+                    request_deserializer=comunicacao__pb2.LoginRequest.FromString,
+                    response_serializer=comunicacao__pb2.LoginReply.SerializeToString,
+            ),
+            'CadastroUsuario': grpc.unary_unary_rpc_method_handler(
+                    servicer.CadastroUsuario,
                     request_deserializer=comunicacao__pb2.LoginRequest.FromString,
                     response_serializer=comunicacao__pb2.LoginReply.SerializeToString,
             ),
@@ -64,6 +80,23 @@ class Comunicar(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/Login',
+            comunicacao__pb2.LoginRequest.SerializeToString,
+            comunicacao__pb2.LoginReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CadastroUsuario(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/CadastroUsuario',
             comunicacao__pb2.LoginRequest.SerializeToString,
             comunicacao__pb2.LoginReply.FromString,
             options, channel_credentials,

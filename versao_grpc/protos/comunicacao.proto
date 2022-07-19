@@ -6,6 +6,7 @@ package comunicacao;
 service Comunicar {
 	// Comunicação dupla
 	rpc Login (LoginRequest) returns (LoginReply);
+  rpc CadastroUsuario (LoginRequest) returns (LoginReply);
 }
 
 message LoginRequest{

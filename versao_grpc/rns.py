@@ -164,7 +164,7 @@ def listagemMeusItens(nome):
 
 def CadastrarCerveja(nome,cerveja):
     #cliente.send(f'\n(SERVIDOR) < {nome} > Vamos cadastrar uma cerveja'.encode('utf-8'))
-    c#liente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
+    #cliente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
     nomeCerveja = cerveja.nomeCerveja
     #cliente.send(f'\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar)'
     #.encode('utf-8'))
