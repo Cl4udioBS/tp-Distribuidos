@@ -15,10 +15,10 @@ class ComunicarStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.ComInterativa = channel.stream_stream(
-                '/comunicacao.Comunicar/ComInterativa',
-                request_serializer=comunicacao__pb2.MsgRequest.SerializeToString,
-                response_deserializer=comunicacao__pb2.MsgReply.FromString,
+        self.Login = channel.unary_unary(
+                '/comunicacao.Comunicar/Login',
+                request_serializer=comunicacao__pb2.LoginRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.LoginReply.FromString,
                 )
 
 
@@ -26,7 +26,7 @@ class ComunicarServicer(object):
     """The greeting service definition.
     """
 
-    def ComInterativa(self, request_iterator, context):
+    def Login(self, request, context):
         """Comunicação dupla
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -36,10 +36,10 @@ class ComunicarServicer(object):
 
 def add_ComunicarServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'ComInterativa': grpc.stream_stream_rpc_method_handler(
-                    servicer.ComInterativa,
-                    request_deserializer=comunicacao__pb2.MsgRequest.FromString,
-                    response_serializer=comunicacao__pb2.MsgReply.SerializeToString,
+            'Login': grpc.unary_unary_rpc_method_handler(
+                    servicer.Login,
+                    request_deserializer=comunicacao__pb2.LoginRequest.FromString,
+                    response_serializer=comunicacao__pb2.LoginReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -53,7 +53,7 @@ class Comunicar(object):
     """
 
     @staticmethod
-    def ComInterativa(request_iterator,
+    def Login(request,
             target,
             options=(),
             channel_credentials=None,
@@ -63,8 +63,8 @@ class Comunicar(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_stream(request_iterator, target, '/comunicacao.Comunicar/ComInterativa',
-            comunicacao__pb2.MsgRequest.SerializeToString,
-            comunicacao__pb2.MsgReply.FromString,
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/Login',
+            comunicacao__pb2.LoginRequest.SerializeToString,
+            comunicacao__pb2.LoginReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
