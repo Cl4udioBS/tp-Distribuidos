@@ -14,12 +14,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t2\x8f\x01\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x45\n\x0f\x43\x61\x64\x61stroUsuario\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1c\n\tListReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x07\n\x05Vazia2\xd3\x01\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x45\n\x0f\x43\x61\x64\x61stroUsuario\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x42\n\x14ListagemDeitensTroca\x12\x12.comunicacao.Vazia\x1a\x16.comunicacao.ListReplyb\x06proto3')
 
 
 
 _LOGINREQUEST = DESCRIPTOR.message_types_by_name['LoginRequest']
 _LOGINREPLY = DESCRIPTOR.message_types_by_name['LoginReply']
+_LISTREPLY = DESCRIPTOR.message_types_by_name['ListReply']
+_VAZIA = DESCRIPTOR.message_types_by_name['Vazia']
 LoginRequest = _reflection.GeneratedProtocolMessageType('LoginRequest', (_message.Message,), {
   'DESCRIPTOR' : _LOGINREQUEST,
   '__module__' : 'comunicacao_pb2'
@@ -34,6 +36,20 @@ LoginReply = _reflection.GeneratedProtocolMessageType('LoginReply', (_message.Me
   })
 _sym_db.RegisterMessage(LoginReply)
 
+ListReply = _reflection.GeneratedProtocolMessageType('ListReply', (_message.Message,), {
+  'DESCRIPTOR' : _LISTREPLY,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.ListReply)
+  })
+_sym_db.RegisterMessage(ListReply)
+
+Vazia = _reflection.GeneratedProtocolMessageType('Vazia', (_message.Message,), {
+  'DESCRIPTOR' : _VAZIA,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.Vazia)
+  })
+_sym_db.RegisterMessage(Vazia)
+
 _COMUNICAR = DESCRIPTOR.services_by_name['Comunicar']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
@@ -42,6 +58,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LOGINREQUEST._serialized_end=65
   _LOGINREPLY._serialized_start=67
   _LOGINREPLY._serialized_end=96
-  _COMUNICAR._serialized_start=99
-  _COMUNICAR._serialized_end=242
+  _LISTREPLY._serialized_start=98
+  _LISTREPLY._serialized_end=126
+  _VAZIA._serialized_start=128
+  _VAZIA._serialized_end=135
+  _COMUNICAR._serialized_start=138
+  _COMUNICAR._serialized_end=349
 # @@protoc_insertion_point(module_scope)

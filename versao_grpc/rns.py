@@ -106,11 +106,10 @@ def autenticacao(usuario):
 
 def cadastroUsuario(nome):
     response = database.InsertUsuario('TPSD.db',nome, '1234')
-    print(f'Usuario {nome} inserido com sucesso!')
+    print(f'SERVIDOR: Usuario {nome} inserido com sucesso!')
     return response
-    
-    
 
+ 
 def listagemDeitensTroca():
     dadosListagem = [ ]
     try:

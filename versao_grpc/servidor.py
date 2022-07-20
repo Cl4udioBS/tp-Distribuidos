@@ -14,7 +14,7 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         print("Request Login")
         login = comunicacao_pb2.LoginReply()
         autenticacao = rns.autenticacao(request.usuario)
-        print("tipo resposta autenticação: ", autenticacao)
+        print("Resposta Login: ", autenticacao)
         login.message = f"{autenticacao}"
         return login 
 
@@ -25,6 +25,15 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         print("Resposta Cadastro: ", cadastro)
         cadastro.message = f"{fazerCadastro}"
         return cadastro 
+
+    def ListagemDeitensTroca(self, request, context):
+        print("Request Lista de Itens")
+        listagemDeitensTroca = rns.listagemDeitensTroca()
+        #print(listagemDeitensTroca)
+        return listagemDeitensTroca
+
+
+#=======================================================================================
     
 def servidor():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

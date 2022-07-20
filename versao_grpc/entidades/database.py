@@ -93,7 +93,7 @@ def InsertUsuario(nomeBanco,nome, senha):
         cursor = sqliteConnection.cursor()
         cursor.execute("INSERT INTO Usuarios values (?, ?)",(nome, senha))
         sqliteConnection.commit()
-        print("usuario inserido com sucesso", cursor.rowcount)
+        print("DB: usuario inserido com sucesso", cursor.rowcount)
         
         cursor.close()
         return 200

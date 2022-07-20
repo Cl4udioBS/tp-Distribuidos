@@ -7,6 +7,7 @@ service Comunicar {
 	// Comunicação dupla
 	rpc Login (LoginRequest) returns (LoginReply);
   rpc CadastroUsuario (LoginRequest) returns (LoginReply);
+  rpc ListagemDeitensTroca (Vazia) returns (ListReply);
 }
 
 message LoginRequest{
@@ -16,6 +17,12 @@ message LoginRequest{
 message LoginReply {
     string message = 1;
 }
+message ListReply {
+  string message = 1;
+}
+
+
+message Vazia{}
 
 /*
 
