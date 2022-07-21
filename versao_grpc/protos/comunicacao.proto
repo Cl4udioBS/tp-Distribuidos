@@ -11,8 +11,16 @@ service Comunicar {
   rpc ListagemTrocasPendentes (ListaTrocaRequest) returns (ListaTrocas);
   rpc CadastroCerveja (CervejaCadastro) returns (CadastroReply);
   rpc TrocarCerveja (TrocaRequest) returns (TrocaReply);
+  rpc ResponderSolicitacao (ResponderSolicitacaoRequest) returns (ResponderSolicitacaoReply);
 }
 
+message ResponderSolicitacaoRequest{
+  string resSolicitacao = 1;
+  string indiceTroca = 2;
+}
+message ResponderSolicitacaoReply {
+  string message = 1;
+}
 message LoginRequest{
     string usuario = 1;
 }

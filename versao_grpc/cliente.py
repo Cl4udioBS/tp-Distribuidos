@@ -41,6 +41,8 @@ def run():
                     solicitaTroca(stub, usuario)
                 if rpc_call == "5":
                     listagemTrocasPendentes(stub, usuario)
+                elif rpc_call == "6":
+                    responderSolicitacao(stub, usuario)
                 elif rpc_call == "7":
                     print("Fechando")
                     break
@@ -94,6 +96,20 @@ def solicitaTroca(stub, usuarioI):
     else:
         print('Houve um erro no seu pedido\n')
 
+def responderSolicitacao(stub, usuarioI):
+    print("\t RESPONDER TROCA ==>")
+    listagemTrocasPendentes(stub, usuarioI)
+    print("Digite o indice da troca que deseja responder")
+    indiceTroca = input()
+    print("SHOW!Agora digite se deseja realizar a troca ou rejeitar a solicitação")
+    print("[ (K)ero p/ aceitar  | Qualquer coisa para rejeitar ] ")
+    resSolicitacao = input().lower()
+    ResponderSolicitacaoRequest = comunicacao_pb2.ResponderSolicitacaoRequest(indiceTroca = indiceTroca,resSolicitacao = resSolicitacao)
+    resposta = stub.ResponderSolicitacao(ResponderSolicitacaoRequest)
+    if (resposta.message == '200'):
+        print('Troca aceita/recusada com SUCESSO!')
+    else:
+        print('Houve um erro na sua resposta\n')
 
 def listagemTrocasPendentes(stub, usuarioI):
     print("\t SUAS TROCAS ==>")
@@ -131,7 +147,7 @@ def cadastroCerveja(stub, usuario):
         print(f'\nnome: {cerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}')
         confirmacao = input('\n[S]im [N]ao\n').lower()
         if confirmacao == "s":
-            itemCadastro = comunicacao_pb2.CervejaCadastro(nome = nome, cerveja = cerveja, abv = abv, estilo = estilo)
+            itemCadastro = comunicacao_pb2.CervejaCadastro(nome = nome, cerveja = cerveja, ibu = ibu, abv = abv, estilo = estilo)
             cadastro = stub.CadastroCerveja(itemCadastro)
             print('CLIENTE:',cadastro)
             outroCadastro = input('Realizar outro cadastro??\n [S]im [N]ao\n')

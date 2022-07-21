@@ -50,6 +50,11 @@ class ComunicarStub(object):
                 request_serializer=comunicacao__pb2.TrocaRequest.SerializeToString,
                 response_deserializer=comunicacao__pb2.TrocaReply.FromString,
                 )
+        self.ResponderSolicitacao = channel.unary_unary(
+                '/comunicacao.Comunicar/ResponderSolicitacao',
+                request_serializer=comunicacao__pb2.ResponderSolicitacaoRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.ResponderSolicitacaoReply.FromString,
+                )
 
 
 class ComunicarServicer(object):
@@ -98,6 +103,12 @@ class ComunicarServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ResponderSolicitacao(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ComunicarServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -135,6 +146,11 @@ def add_ComunicarServicer_to_server(servicer, server):
                     servicer.TrocarCerveja,
                     request_deserializer=comunicacao__pb2.TrocaRequest.FromString,
                     response_serializer=comunicacao__pb2.TrocaReply.SerializeToString,
+            ),
+            'ResponderSolicitacao': grpc.unary_unary_rpc_method_handler(
+                    servicer.ResponderSolicitacao,
+                    request_deserializer=comunicacao__pb2.ResponderSolicitacaoRequest.FromString,
+                    response_serializer=comunicacao__pb2.ResponderSolicitacaoReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -263,5 +279,22 @@ class Comunicar(object):
         return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/TrocarCerveja',
             comunicacao__pb2.TrocaRequest.SerializeToString,
             comunicacao__pb2.TrocaReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ResponderSolicitacao(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/ResponderSolicitacao',
+            comunicacao__pb2.ResponderSolicitacaoRequest.SerializeToString,
+            comunicacao__pb2.ResponderSolicitacaoReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -362,7 +362,7 @@ def AceitaTroca(nomeBanco,id_troca):
 
 
 
-def RejeitaTroca(nomeBanco,id_troca,solic,exec):
+def RejeitaTroca(nomeBanco,id_troca):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()

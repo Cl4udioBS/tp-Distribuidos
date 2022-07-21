@@ -91,6 +91,14 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         troca.message = str(fazerTrocaCerveja)
         return troca
 
+    def ResponderSolicitacao(self, request, context):
+        print("Request RESPONDER SOLICITACAO")
+        resposta = comunicacao_pb2.ResponderSolicitacaoReply()
+        efetivarResposta = rns.responderSolicitacao(request.resSolicitacao, request.indiceTroca)
+        print("Resposta resposta: ", resposta)
+        resposta.message = f"{efetivarResposta}"
+        return resposta
+
 
 #=======================================================================================
     

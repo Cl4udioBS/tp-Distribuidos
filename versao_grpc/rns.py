@@ -87,70 +87,25 @@ def listarTrocasPendentes(usuario):
         disponiveis = [] 
         for troca in trocas:
             if troca[4] == usuario:
-                disponiveis.append(troca)                            
+                disponiveis.append(troca)                          
         try:
             return disponiveis                   
         except:
             return 400
 
-"""
-        enviaMsgServ("Deseja Responder alguma solicitação?",cliente)
-        enviaMsgServ("[Kero(1)] [Agora não(0)]",cliente)
-        resposta = recebeMsgServ(cliente)
-        if(resposta == '1'):
-            enviaMsgServ(f"Agora digite o indice da troca que deseja responder",cliente)
-            index = recebeMsgServ(cliente)
-            enviaMsgServ(f"SHOW!Agora digite se deseja realizar a troca ou rejeitar a solicitação",cliente)
-            enviaMsgServ(f"[Kero(1)] [Rejeitar Solicitação(0)]",cliente)
-            rej = recebeMsgServ(cliente)
-            if(rej == '1'):
-                try:
-                    database.AtualizaTrocaCervejas("TPSD.db",index,"a")
-                    enviaMsgServ(f"Troca foi aceita",cliente)
-                except:
-                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
-            else:
-                try:
-                    database.AtualizaTrocaCervejas("TPSD.db",index,"r")
-                    enviaMsgServ("Ok solicitação excluida")
-                except:
-                    enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
-
-        else:
-              enviaMsgServ("Ok retornando!!")
-"""
-
-def responderSolicitacao(resSolicitacao,indiceTroca,solic,exec):
-    if(resSolicitacao == '1'):
+def responderSolicitacao(resSolicitacao,indiceTroca):
+    if(resSolicitacao == 'k'):
         try:
-            database.AceitaTroca("TPSD.db",indiceTroca,solic,exec)
+            database.AceitaTroca("TPSD.db",indiceTroca)
             troca = database.SelectTrocaById(indiceTroca)
-            #!generalizar depois
-            database.TrocaTitularidade("TPSD.db",solic,troca[0][2])
-            #enviaMsgServ(f"Troca foi aceita",cliente)
+            database.TrocaTitularidade("TPSD.db",troca[0][3],troca[0][2])
             return 200
         except:
             return 400
-            #enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!");
     else:
         try:
-            database.RejeitaTroca("TPSD.db",indiceTroca,solic,exec)
+            database.RejeitaTroca("TPSD.db",indiceTroca)
             return 200
         except:
-            return 400
+            return 400        
 
-           
-     
-def ListarTrocasPendentesUsr(usuario):
-    trocas = database.SelectTrocasByUsrExec(usuario)
-    if(len(trocas)>0):
-        return trocas
-        """
-        enviaMsgServ("\tEssas são as trocas pendentes que você tem: ", cliente)
-        for troca in trocas:
-            cervejaSolict = database.SelectCervejaByIdBar(troca[1])
-            cervejaExec = database.SelectCervejaByIdBar(troca[2])
-           
-            cliente.send(f'\n|| oiIndice: {troca[0]} ||CERVEJA OFERECIDA: {cervejaSolict} ||CERVEJA SOLICITADA: {cervejaExec} '.encode('utf-8'))
-        """
-    return 400
