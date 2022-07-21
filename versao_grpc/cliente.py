@@ -23,9 +23,10 @@ def run():
                 print("1:BAR - itens p/ troca ")
                 print("2:Cadastrar cerveja")
                 print("3:Ver sua Geladeira(Itens)")
-                print("4:Enviar pedido de troca")                
-                print("5:Aceitar/Recusar trocas")
-                print("6:Kero Sair")
+                print("4:Enviar pedido de troca")
+                print("5:Listar TROCAS PENDENTES")                                
+                print("6:Aceitar/Recusar trocas")
+                print("7:Kero Sair")
                 rpc_call = input(" ESCOLHA UMA DAS OPCOES:")
                 if rpc_call == "1":
                     listagemDeitensTroca(stub)  
@@ -39,8 +40,8 @@ def run():
                         return
                     solicitaTroca(stub, usuario)
                 if rpc_call == "5":
-                    pass
-                elif rpc_call == "6":
+                    listagemTrocasPendentes(stub, usuario)
+                elif rpc_call == "7":
                     print("Fechando")
                     break
             else:
@@ -79,6 +80,7 @@ def cadastroUsuario(stub, usuarioI):
     
 def solicitaTroca(stub, usuarioI):
     print("\t SOLICITAR TROCA ==>")
+    listagemDeitensTroca(stub)
     print(f"{usuarioI}: Escolha primeiro a cerveja que você deseja solicitar!\nÉ só digitar o indice da desejada")
     indiceCervejaExecI = input()
     print("Veja sua geladeira novamente:")
@@ -87,8 +89,18 @@ def solicitaTroca(stub, usuarioI):
     indiceCervejaSolicitI = input()
     TrocaRequest = comunicacao_pb2.TrocaRequest(indiceCervejaExec = indiceCervejaExecI,indiceCervejaSolicit = indiceCervejaSolicitI )
     troca = stub.TrocarCerveja(TrocaRequest)
-    print('STATUS da TROCA:',troca)
+    if (troca.message == '200'):
+        print('Pedido de troca enviado')
+    else:
+        print('Houve um erro no seu pedido\n')
 
+
+def listagemTrocasPendentes(stub, usuarioI):
+    print("\t SUAS TROCAS ==>")
+    trocas = stub.ListagemTrocasPendentes(comunicacao_pb2.ListaTrocaRequest(usuario = usuarioI))
+    if (trocas):
+        print(trocas)
+        print("^ Todas as trocas listadas | Vazio (Cadastre uma troca)")
 
 def listagemDeitensTroca(stub):
     print("\t NOSSO BAR ==>")
@@ -98,10 +110,9 @@ def listagemDeitensTroca(stub):
 def listagemGeladeira(stub, usuarioI):
     print("\t SUA GELADEIRA ==>")
     geladeira = stub.ListagemDeitensGeladeira(comunicacao_pb2.ListaGeladeiraRequest(usuario = usuarioI))
-    if (geladeira == 400):
+    if (geladeira):
         print(geladeira)
-    else:
-        print("N possui itens cadastrados")
+        print("^ Todos os itens listados | Vazio (Cadastre alguma cerveja)")
 
 def cadastroCerveja(stub, usuario):
     while (TRUE):

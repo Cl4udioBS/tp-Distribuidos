@@ -30,15 +30,15 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         print("Request Lista de Itens BAR")
         listaBar = comunicacao_pb2.ListaCervejaBar()
         listagemDeitensT = rns.listagemDeitensTroca()
-        if (listagemDeitensT != 400):
+        if (listagemDeitensT != 404):
             for cervejaBar in listagemDeitensT:
-                cervejaDisponivel = comunicacao_pb2.CervejaBar()
-                cervejaDisponivel.id = cervejaBar[0]
-                cervejaDisponivel.dono = cervejaBar[1]
-                cervejaDisponivel.cerveja = cervejaBar[2]
-                cervejaDisponivel.abv = cervejaBar[3]
-                cervejaDisponivel.ibu = cervejaBar[4]
-                cervejaDisponivel.estilo = cervejaBar[5]
+                cervejaDisponivel           = comunicacao_pb2.CervejaBar()
+                cervejaDisponivel.id        = cervejaBar[0]
+                cervejaDisponivel.dono      = cervejaBar[1]
+                cervejaDisponivel.cerveja   = cervejaBar[2]
+                cervejaDisponivel.abv       = cervejaBar[3]
+                cervejaDisponivel.ibu       = cervejaBar[4]
+                cervejaDisponivel.estilo    = cervejaBar[5]
                 listaBar.cerveja.append(cervejaDisponivel)          
         return listaBar
         
@@ -47,20 +47,32 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         print("Request Lista de Itens GELADEIRA")
         listaGeladeira = comunicacao_pb2.ListaCervejaBar()
         listagemDeitensT = rns.listagemMeusItens(request.usuario)
-        print(listagemDeitensT)
         if (listagemDeitensT != 400):
             for cervejaGeladeira in listagemDeitensT:
-                cervejaDisponivel = comunicacao_pb2.CervejaBar()
-                cervejaDisponivel.id = cervejaGeladeira[0]
-                cervejaDisponivel.dono = cervejaGeladeira[1]
-                cervejaDisponivel.cerveja = cervejaGeladeira[2]
-                cervejaDisponivel.abv = cervejaGeladeira[3]
-                cervejaDisponivel.ibu = cervejaGeladeira[4]
-                cervejaDisponivel.estilo = cervejaGeladeira[5]
-                listaGeladeira.cerveja.append(cervejaDisponivel)          
-        else:
-            listaGeladeira = '400'
+                cervejaDisponivel           = comunicacao_pb2.CervejaBar()
+                cervejaDisponivel.id        = cervejaGeladeira[0]
+                cervejaDisponivel.dono      = cervejaGeladeira[1]
+                cervejaDisponivel.cerveja   = cervejaGeladeira[2]
+                cervejaDisponivel.abv       = cervejaGeladeira[3]
+                cervejaDisponivel.ibu       = cervejaGeladeira[4]
+                cervejaDisponivel.estilo    = cervejaGeladeira[5]
+                listaGeladeira.cerveja.append(cervejaDisponivel)
         return listaGeladeira
+
+    def ListagemTrocasPendentes(self, request, context):
+        print("Request Lista de TROCAS")
+        listaTrocas = comunicacao_pb2.ListaTrocas()
+        listagemDeitensT = rns.listarTrocasPendentes(request.usuario)
+        if (listagemDeitensT != 400):
+            for trocaDisp in listagemDeitensT:
+                troca                       = comunicacao_pb2.Trocas()
+                troca.id                    = trocaDisp[0]
+                troca.idCervejaOferecida    = trocaDisp[1]
+                troca.idCervejaDesejada     = trocaDisp[2]
+                troca.solicitante           = trocaDisp[3]
+                troca.executor              = trocaDisp[4]
+                listaTrocas.troca.append(troca)
+        return listaTrocas
 
 
     def CadastroCerveja(self, request, context):
@@ -76,7 +88,7 @@ class ServidorKero(comunicacao_pb2_grpc.ComunicarServicer):
         troca = comunicacao_pb2.TrocaReply()
         fazerTrocaCerveja = rns.solicitaTroca(request)
         print("Resposta Troca: ", fazerTrocaCerveja)
-        troca.message = 'STATUS: '+ str(fazerTrocaCerveja)
+        troca.message = str(fazerTrocaCerveja)
         return troca
 
 

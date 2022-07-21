@@ -8,6 +8,7 @@ service Comunicar {
   rpc CadastroUsuario (LoginRequest) returns (LoginReply);
   rpc ListagemDeitensTroca (Vazia) returns (ListaCervejaBar);
   rpc ListagemDeitensGeladeira (ListaGeladeiraRequest) returns (ListaCervejaBar);
+  rpc ListagemTrocasPendentes (ListaTrocaRequest) returns (ListaTrocas);
   rpc CadastroCerveja (CervejaCadastro) returns (CadastroReply);
   rpc TrocarCerveja (TrocaRequest) returns (TrocaReply);
 }
@@ -27,6 +28,9 @@ message CadastroReply {
 message ListRequest {
   string message = 1;
 }
+message ListaTrocaRequest {
+  string usuario = 1;
+}
 message ListaGeladeiraRequest {
   string usuario = 1;
 }
@@ -37,7 +41,6 @@ message TrocaRequest {
 message TrocaReply {
   string message = 1;
 }
-
 message CervejaBar {
   int32 id = 1;
   string dono = 2;
@@ -46,9 +49,18 @@ message CervejaBar {
   string ibu = 5;
   string estilo = 6;
 }
-
 message ListaCervejaBar{
   repeated CervejaBar cerveja = 1;
+}
+message Trocas {
+  int32 id = 1;
+  int32 idCervejaOferecida = 2;
+  int32 idCervejaDesejada = 3;
+  string solicitante = 4;
+  string executor = 5;
+}
+message ListaTrocas{
+  repeated Trocas troca = 1;
 }
 
 message CervejaCadastro {

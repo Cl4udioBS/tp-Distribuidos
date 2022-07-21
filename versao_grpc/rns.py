@@ -25,48 +25,21 @@ def cadastroUsuario(nome):
 def listagemDeitensTroca():
     dadosListagem = [ ]
     try:
-        ##cliente.send(f'(SERVIDOR) < {nome} > Confira as cervejas disponiveis \n\tem nosso BAR'.encode('utf-8'))
-        ##cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
         dadosListagem = database.SelectTodasCervejas()
         if (len(dadosListagem) > 0):
             return dadosListagem
-            #!MOVER PARA CLIENTE OU INTERFACE GRÁFICA
-            """
-            for breja in dadosListagem:
-               
-                if (breja[1]!=nome):
-                    cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
-            cliente.send(f'\n(SERVIDOR) < {nome} > E ai?! Vai querer?'.encode('utf-8'))
-            cliente.send(f'\n(SERVIDOR)[Bora] [Voltar]'.encode('utf-8'))
-            
-            resposta = cliente.recv(2048).decode('utf-8');
-            
-            if(resposta.lower() == "bora"):
-                return 1
-            else:
-                return 0
-                """
         else:
             return 404
-           #cliente.send(f'\n(SERVIDOR) < {nome} >Desculpe, tente outro dia'.encode('utf-8'))
     except:
         print("Error: Sorry :/")
 
 def listagemMeusItens(nome):
     dadosListagem = [ ]
     try:
-        #cliente.send(f'(SERVIDOR) < {nome} > Essas são as cervejas que você cadastrou \n\tem nosso BAR'.encode('utf-8'))
-        #cliente.send(f'(SERVIDOR)[INDICE,PROPRIETARIO, CERVEJA, ABV, IBU, ESTILO]'.encode('utf-8'))
         dadosListagem = database.SelectCervejaByUsuario(nome)
         if (len(dadosListagem) > 0):
             return dadosListagem
-            """
-            for breja in dadosListagem:
-                cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
-            return 1       
-            """ 
         else:
-            #cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem itens cadastrados'.encode('utf-8'))
             return 400
     except:
         print("Error: Sorry :/")
@@ -88,10 +61,7 @@ def cadastrarCerveja(dadosCerveja):
     except:
         print("Erro no cadastro!")
         return 400
-
-     
-
-
+   
 def solicitaTroca(dadosTroca):
     indiceCervejaSolicit    = dadosTroca.indiceCervejaSolicit
     indiceCervejaExec       = dadosTroca.indiceCervejaExec
@@ -111,31 +81,17 @@ def solicitaTroca(dadosTroca):
         print("Error: Sorry :/")
         response = 400
 
-
-
-def ListarTrocasPendentes(cliente,nome):
+def listarTrocasPendentes(usuario):
     trocas = database.SelectTrocas("p")
     if(len(trocas)>0):
-        #enviaMsgServ(f"\tEssas são as trocas pendentes do {nome}: ", cliente)  
-        trocasRes = [] 
-        trocasAux = []
+        disponiveis = [] 
         for troca in trocas:
-            if troca[4] == nome:
-                try:
-                    #!mudar para cliente
-                    '''                    
-                    cervejaSolict = database.SelectCervejaByIdBar(troca[1])
-                    cervejaExec = database.SelectCervejaByIdBar(troca[2])
-
-                    enviaMsgServ(f"|| Indice: {troca[0]} ||",cliente)
-                    enviaMsgServ(f"|| Cerveja oferecida: {cervejaSolict} ||",cliente)
-                    enviaMsgServ(f"|| Cerveja solicitada: {cervejaExec} ||",cliente)
-                    '''
-
-                    return troca
-                except:
-                    return 400
-                    #enviaMsgServ("ops!! tivemos um problema, tente novamente mais tarde!",cliente);
+            if troca[4] == usuario:
+                disponiveis.append(troca)                            
+        try:
+            return disponiveis                   
+        except:
+            return 400
 
 """
         enviaMsgServ("Deseja Responder alguma solicitação?",cliente)

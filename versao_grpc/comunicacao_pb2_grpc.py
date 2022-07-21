@@ -35,6 +35,11 @@ class ComunicarStub(object):
                 request_serializer=comunicacao__pb2.ListaGeladeiraRequest.SerializeToString,
                 response_deserializer=comunicacao__pb2.ListaCervejaBar.FromString,
                 )
+        self.ListagemTrocasPendentes = channel.unary_unary(
+                '/comunicacao.Comunicar/ListagemTrocasPendentes',
+                request_serializer=comunicacao__pb2.ListaTrocaRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.ListaTrocas.FromString,
+                )
         self.CadastroCerveja = channel.unary_unary(
                 '/comunicacao.Comunicar/CadastroCerveja',
                 request_serializer=comunicacao__pb2.CervejaCadastro.SerializeToString,
@@ -75,6 +80,12 @@ class ComunicarServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListagemTrocasPendentes(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def CadastroCerveja(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -109,6 +120,11 @@ def add_ComunicarServicer_to_server(servicer, server):
                     servicer.ListagemDeitensGeladeira,
                     request_deserializer=comunicacao__pb2.ListaGeladeiraRequest.FromString,
                     response_serializer=comunicacao__pb2.ListaCervejaBar.SerializeToString,
+            ),
+            'ListagemTrocasPendentes': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListagemTrocasPendentes,
+                    request_deserializer=comunicacao__pb2.ListaTrocaRequest.FromString,
+                    response_serializer=comunicacao__pb2.ListaTrocas.SerializeToString,
             ),
             'CadastroCerveja': grpc.unary_unary_rpc_method_handler(
                     servicer.CadastroCerveja,
@@ -196,6 +212,23 @@ class Comunicar(object):
         return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/ListagemDeitensGeladeira',
             comunicacao__pb2.ListaGeladeiraRequest.SerializeToString,
             comunicacao__pb2.ListaCervejaBar.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListagemTrocasPendentes(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/ListagemTrocasPendentes',
+            comunicacao__pb2.ListaTrocaRequest.SerializeToString,
+            comunicacao__pb2.ListaTrocas.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
