@@ -1,4 +1,5 @@
 #talvez utilziar time
+from pickle import FALSE, TRUE
 import time
 import grpc
 import comunicacao_pb2
@@ -10,35 +11,51 @@ def run():
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = comunicacao_pb2_grpc.ComunicarStub(channel)
 
+        print("\t EFETUAR LOGIN ==>")
+        print("Digite seu nome para fazer login")
+        print("")
+        print("ENTER p/ sair") 
+        usuario = str(input().lower())
         while(True):
-            if(LOGADO != 0):
-                print("1:Geladeira ")
+       
+            if(LOGADO != 0):                
+                print("\tMENU")
+                print("1:BAR - itens p/ troca ")
                 print("2:Cadastrar cerveja")
                 print("3:Ver sua Geladeira(Itens)")
-                print("4:Aceitar/Recusar trocas")
-                print("5:Kero Sair")
+                print("4:Enviar pedido de troca")                
+                print("5:Aceitar/Recusar trocas")
+                print("6:Kero Sair")
                 rpc_call = input(" ESCOLHA UMA DAS OPCOES:")
                 if rpc_call == "1":
-                    listagemDeitensTroca(stub)                
-                elif rpc_call == "5":
+                    listagemDeitensTroca(stub)  
+                if rpc_call == "2":
+                    cadastroCerveja(stub, usuario)
+                if rpc_call == "3":
+                    listagemGeladeira(stub, usuario)
+                if rpc_call == "4":
+                    if (listagemGeladeira(stub, usuario) == 400):
+                        print("Necessario ter cervejas cadastradas")
+                        return
+                    solicitaTroca(stub, usuario)
+                if rpc_call == "5":
+                    pass
+                elif rpc_call == "6":
                     print("Fechando")
                     break
             else:
-                conexaoLogin = login(stub)
+                conexaoLogin = login(stub, usuario)
+                LOGADO = 1
                 if (conexaoLogin != 1):
-                    conexaoCadastro = cadastroUsuario(stub)                
+                    conexaoCadastro = cadastroUsuario(stub, usuario)            
                     if (conexaoCadastro == 0):
                         break
-                LOGADO = 1
+                    LOGADO = 1
+
 
 #=======================================================================================
             
-def login(stub):
-    print("\t EFETUAR LOGIN ==>")
-    print("Digite seu nome para fazer login")
-    print("")
-    print("ENTER p/ sair")        
-    n = input()
+def login(stub, n):
     LoginRequest = comunicacao_pb2.LoginRequest(usuario = n)
     usuarioNoSistema  = (stub.Login(LoginRequest)).message
     if ((usuarioNoSistema != 'T') or (n == "")):
@@ -47,24 +64,68 @@ def login(stub):
     print("Bem vindo(a): ", LoginRequest.usuario)
     return 1
 
-def cadastroUsuario(stub):
+def cadastroUsuario(stub, usuarioI):
     print("\t EFETUAR CADASTRO ==>")
-    print("Digite seu nome para fazer CADASTRO")
+    print(f"{usuarioI}: digite seu nome novamente para fazer CADASTRO")
     print("")
     print("ENTER p/ sair")      
     n = input()
-    LoginRequest = comunicacao_pb2.LoginRequest(usuario = n)
+    LoginRequest = comunicacao_pb2.LoginRequest(usuario = usuarioI)
     if (n == ""):
         return 0
     stub.CadastroUsuario(LoginRequest)
     print("Bem vindo(a): ", LoginRequest.usuario)
     return 1
+    
+def solicitaTroca(stub, usuarioI):
+    print("\t SOLICITAR TROCA ==>")
+    print(f"{usuarioI}: Escolha primeiro a cerveja que você deseja solicitar!\nÉ só digitar o indice da desejada")
+    indiceCervejaExecI = input()
+    print("Veja sua geladeira novamente:")
+    listagemGeladeira(stub, usuarioI)
+    print(f"{usuarioI}: Agora só escolher o indice da cerveja que você deseja dar em troca")
+    indiceCervejaSolicitI = input()
+    TrocaRequest = comunicacao_pb2.TrocaRequest(indiceCervejaExec = indiceCervejaExecI,indiceCervejaSolicit = indiceCervejaSolicitI )
+    troca = stub.TrocarCerveja(TrocaRequest)
+    print('STATUS da TROCA:',troca)
 
-def listagemDeitensTroca (stub):
-    print("\t NOSSA GELADEIRA ==>")
-    geladeira = (stub.ListagemDeitensTroca(comunicacao_pb2.Vazia())).message
 
-    print(geladeira)
+def listagemDeitensTroca(stub):
+    print("\t NOSSO BAR ==>")
+    bar = stub.ListagemDeitensTroca(comunicacao_pb2.Vazia())
+    print(bar)
+
+def listagemGeladeira(stub, usuarioI):
+    print("\t SUA GELADEIRA ==>")
+    geladeira = stub.ListagemDeitensGeladeira(comunicacao_pb2.ListaGeladeiraRequest(usuario = usuarioI))
+    if (geladeira == 400):
+        print(geladeira)
+    else:
+        print("N possui itens cadastrados")
+
+def cadastroCerveja(stub, usuario):
+    while (TRUE):
+        print("\t CADASTRAR CERVEJA ==>")
+        nome = usuario
+        print(f'\n(SERVIDOR) < {usuario} > Vamos cadastrar uma cerveja')
+        print('\ndigite o nome cerveja')
+        cerveja = input()
+        print("\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar")
+        abv = input()
+        print("\nAgora digite o IBU (IBU é a sigla para International Bitterness Units, ou o quão amargo é um exemplar")
+        ibu = input()
+        print(f'\nTa quaaaase! Digite agora o estilo')
+        estilo = input()
+        print('\nConfirma as informações pra gente?')
+        print(f'\nnome: {cerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}')
+        confirmacao = input('\n[S]im [N]ao\n').lower()
+        if confirmacao == "s":
+            itemCadastro = comunicacao_pb2.CervejaCadastro(nome = nome, cerveja = cerveja, abv = abv, estilo = estilo)
+            cadastro = stub.CadastroCerveja(itemCadastro)
+            print('CLIENTE:',cadastro)
+            outroCadastro = input('Realizar outro cadastro??\n [S]im [N]ao\n')
+            if outroCadastro != "s":
+                break
 
     
            

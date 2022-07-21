@@ -14,13 +14,21 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1c\n\tListReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x07\n\x05Vazia2\xd3\x01\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x45\n\x0f\x43\x61\x64\x61stroUsuario\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x42\n\x14ListagemDeitensTroca\x12\x12.comunicacao.Vazia\x1a\x16.comunicacao.ListReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63omunicacao.proto\x12\x0b\x63omunicacao\"\x1f\n\x0cLoginRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"\x1d\n\nLoginReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1c\n\tListReply\x12\x0f\n\x07message\x18\x01 \x01(\t\" \n\rCadastroReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1e\n\x0bListRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"(\n\x15ListaGeladeiraRequest\x12\x0f\n\x07usuario\x18\x01 \x01(\t\"G\n\x0cTrocaRequest\x12\x19\n\x11indiceCervejaExec\x18\x01 \x01(\t\x12\x1c\n\x14indiceCervejaSolicit\x18\x02 \x01(\t\"\x1d\n\nTrocaReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"a\n\nCervejaBar\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04\x64ono\x18\x02 \x01(\t\x12\x0f\n\x07\x63\x65rveja\x18\x03 \x01(\t\x12\x0b\n\x03\x61\x62v\x18\x04 \x01(\t\x12\x0b\n\x03ibu\x18\x05 \x01(\t\x12\x0e\n\x06\x65stilo\x18\x06 \x01(\t\";\n\x0fListaCervejaBar\x12(\n\x07\x63\x65rveja\x18\x01 \x03(\x0b\x32\x17.comunicacao.CervejaBar\"Z\n\x0f\x43\x65rvejaCadastro\x12\x0f\n\x07\x63\x65rveja\x18\x01 \x01(\t\x12\x0b\n\x03\x61\x62v\x18\x02 \x01(\t\x12\x0b\n\x03ibu\x18\x03 \x01(\t\x12\x0e\n\x06\x65stilo\x18\x04 \x01(\t\x12\x0c\n\x04nome\x18\x05 \x01(\t\"\x07\n\x05Vazia2\xc9\x03\n\tComunicar\x12;\n\x05Login\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12\x45\n\x0f\x43\x61\x64\x61stroUsuario\x12\x19.comunicacao.LoginRequest\x1a\x17.comunicacao.LoginReply\x12H\n\x14ListagemDeitensTroca\x12\x12.comunicacao.Vazia\x1a\x1c.comunicacao.ListaCervejaBar\x12\\\n\x18ListagemDeitensGeladeira\x12\".comunicacao.ListaGeladeiraRequest\x1a\x1c.comunicacao.ListaCervejaBar\x12K\n\x0f\x43\x61\x64\x61stroCerveja\x12\x1c.comunicacao.CervejaCadastro\x1a\x1a.comunicacao.CadastroReply\x12\x43\n\rTrocarCerveja\x12\x19.comunicacao.TrocaRequest\x1a\x17.comunicacao.TrocaReplyb\x06proto3')
 
 
 
 _LOGINREQUEST = DESCRIPTOR.message_types_by_name['LoginRequest']
 _LOGINREPLY = DESCRIPTOR.message_types_by_name['LoginReply']
 _LISTREPLY = DESCRIPTOR.message_types_by_name['ListReply']
+_CADASTROREPLY = DESCRIPTOR.message_types_by_name['CadastroReply']
+_LISTREQUEST = DESCRIPTOR.message_types_by_name['ListRequest']
+_LISTAGELADEIRAREQUEST = DESCRIPTOR.message_types_by_name['ListaGeladeiraRequest']
+_TROCAREQUEST = DESCRIPTOR.message_types_by_name['TrocaRequest']
+_TROCAREPLY = DESCRIPTOR.message_types_by_name['TrocaReply']
+_CERVEJABAR = DESCRIPTOR.message_types_by_name['CervejaBar']
+_LISTACERVEJABAR = DESCRIPTOR.message_types_by_name['ListaCervejaBar']
+_CERVEJACADASTRO = DESCRIPTOR.message_types_by_name['CervejaCadastro']
 _VAZIA = DESCRIPTOR.message_types_by_name['Vazia']
 LoginRequest = _reflection.GeneratedProtocolMessageType('LoginRequest', (_message.Message,), {
   'DESCRIPTOR' : _LOGINREQUEST,
@@ -43,6 +51,62 @@ ListReply = _reflection.GeneratedProtocolMessageType('ListReply', (_message.Mess
   })
 _sym_db.RegisterMessage(ListReply)
 
+CadastroReply = _reflection.GeneratedProtocolMessageType('CadastroReply', (_message.Message,), {
+  'DESCRIPTOR' : _CADASTROREPLY,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.CadastroReply)
+  })
+_sym_db.RegisterMessage(CadastroReply)
+
+ListRequest = _reflection.GeneratedProtocolMessageType('ListRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTREQUEST,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.ListRequest)
+  })
+_sym_db.RegisterMessage(ListRequest)
+
+ListaGeladeiraRequest = _reflection.GeneratedProtocolMessageType('ListaGeladeiraRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTAGELADEIRAREQUEST,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.ListaGeladeiraRequest)
+  })
+_sym_db.RegisterMessage(ListaGeladeiraRequest)
+
+TrocaRequest = _reflection.GeneratedProtocolMessageType('TrocaRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TROCAREQUEST,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.TrocaRequest)
+  })
+_sym_db.RegisterMessage(TrocaRequest)
+
+TrocaReply = _reflection.GeneratedProtocolMessageType('TrocaReply', (_message.Message,), {
+  'DESCRIPTOR' : _TROCAREPLY,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.TrocaReply)
+  })
+_sym_db.RegisterMessage(TrocaReply)
+
+CervejaBar = _reflection.GeneratedProtocolMessageType('CervejaBar', (_message.Message,), {
+  'DESCRIPTOR' : _CERVEJABAR,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.CervejaBar)
+  })
+_sym_db.RegisterMessage(CervejaBar)
+
+ListaCervejaBar = _reflection.GeneratedProtocolMessageType('ListaCervejaBar', (_message.Message,), {
+  'DESCRIPTOR' : _LISTACERVEJABAR,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.ListaCervejaBar)
+  })
+_sym_db.RegisterMessage(ListaCervejaBar)
+
+CervejaCadastro = _reflection.GeneratedProtocolMessageType('CervejaCadastro', (_message.Message,), {
+  'DESCRIPTOR' : _CERVEJACADASTRO,
+  '__module__' : 'comunicacao_pb2'
+  # @@protoc_insertion_point(class_scope:comunicacao.CervejaCadastro)
+  })
+_sym_db.RegisterMessage(CervejaCadastro)
+
 Vazia = _reflection.GeneratedProtocolMessageType('Vazia', (_message.Message,), {
   'DESCRIPTOR' : _VAZIA,
   '__module__' : 'comunicacao_pb2'
@@ -60,8 +124,24 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LOGINREPLY._serialized_end=96
   _LISTREPLY._serialized_start=98
   _LISTREPLY._serialized_end=126
-  _VAZIA._serialized_start=128
-  _VAZIA._serialized_end=135
-  _COMUNICAR._serialized_start=138
-  _COMUNICAR._serialized_end=349
+  _CADASTROREPLY._serialized_start=128
+  _CADASTROREPLY._serialized_end=160
+  _LISTREQUEST._serialized_start=162
+  _LISTREQUEST._serialized_end=192
+  _LISTAGELADEIRAREQUEST._serialized_start=194
+  _LISTAGELADEIRAREQUEST._serialized_end=234
+  _TROCAREQUEST._serialized_start=236
+  _TROCAREQUEST._serialized_end=307
+  _TROCAREPLY._serialized_start=309
+  _TROCAREPLY._serialized_end=338
+  _CERVEJABAR._serialized_start=340
+  _CERVEJABAR._serialized_end=437
+  _LISTACERVEJABAR._serialized_start=439
+  _LISTACERVEJABAR._serialized_end=498
+  _CERVEJACADASTRO._serialized_start=500
+  _CERVEJACADASTRO._serialized_end=590
+  _VAZIA._serialized_start=592
+  _VAZIA._serialized_end=599
+  _COMUNICAR._serialized_start=602
+  _COMUNICAR._serialized_end=1059
 # @@protoc_insertion_point(module_scope)

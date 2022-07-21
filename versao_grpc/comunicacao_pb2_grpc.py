@@ -6,7 +6,7 @@ import comunicacao_pb2 as comunicacao__pb2
 
 
 class ComunicarStub(object):
-    """The greeting service definition.
+    """Definiçao do Serviço de troca
     """
 
     def __init__(self, channel):
@@ -28,17 +28,31 @@ class ComunicarStub(object):
         self.ListagemDeitensTroca = channel.unary_unary(
                 '/comunicacao.Comunicar/ListagemDeitensTroca',
                 request_serializer=comunicacao__pb2.Vazia.SerializeToString,
-                response_deserializer=comunicacao__pb2.ListReply.FromString,
+                response_deserializer=comunicacao__pb2.ListaCervejaBar.FromString,
+                )
+        self.ListagemDeitensGeladeira = channel.unary_unary(
+                '/comunicacao.Comunicar/ListagemDeitensGeladeira',
+                request_serializer=comunicacao__pb2.ListaGeladeiraRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.ListaCervejaBar.FromString,
+                )
+        self.CadastroCerveja = channel.unary_unary(
+                '/comunicacao.Comunicar/CadastroCerveja',
+                request_serializer=comunicacao__pb2.CervejaCadastro.SerializeToString,
+                response_deserializer=comunicacao__pb2.CadastroReply.FromString,
+                )
+        self.TrocarCerveja = channel.unary_unary(
+                '/comunicacao.Comunicar/TrocarCerveja',
+                request_serializer=comunicacao__pb2.TrocaRequest.SerializeToString,
+                response_deserializer=comunicacao__pb2.TrocaReply.FromString,
                 )
 
 
 class ComunicarServicer(object):
-    """The greeting service definition.
+    """Definiçao do Serviço de troca
     """
 
     def Login(self, request, context):
-        """Comunicação dupla
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -50,6 +64,24 @@ class ComunicarServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ListagemDeitensTroca(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListagemDeitensGeladeira(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CadastroCerveja(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TrocarCerveja(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -71,7 +103,22 @@ def add_ComunicarServicer_to_server(servicer, server):
             'ListagemDeitensTroca': grpc.unary_unary_rpc_method_handler(
                     servicer.ListagemDeitensTroca,
                     request_deserializer=comunicacao__pb2.Vazia.FromString,
-                    response_serializer=comunicacao__pb2.ListReply.SerializeToString,
+                    response_serializer=comunicacao__pb2.ListaCervejaBar.SerializeToString,
+            ),
+            'ListagemDeitensGeladeira': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListagemDeitensGeladeira,
+                    request_deserializer=comunicacao__pb2.ListaGeladeiraRequest.FromString,
+                    response_serializer=comunicacao__pb2.ListaCervejaBar.SerializeToString,
+            ),
+            'CadastroCerveja': grpc.unary_unary_rpc_method_handler(
+                    servicer.CadastroCerveja,
+                    request_deserializer=comunicacao__pb2.CervejaCadastro.FromString,
+                    response_serializer=comunicacao__pb2.CadastroReply.SerializeToString,
+            ),
+            'TrocarCerveja': grpc.unary_unary_rpc_method_handler(
+                    servicer.TrocarCerveja,
+                    request_deserializer=comunicacao__pb2.TrocaRequest.FromString,
+                    response_serializer=comunicacao__pb2.TrocaReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -81,7 +128,7 @@ def add_ComunicarServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class Comunicar(object):
-    """The greeting service definition.
+    """Definiçao do Serviço de troca
     """
 
     @staticmethod
@@ -131,6 +178,57 @@ class Comunicar(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/ListagemDeitensTroca',
             comunicacao__pb2.Vazia.SerializeToString,
-            comunicacao__pb2.ListReply.FromString,
+            comunicacao__pb2.ListaCervejaBar.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListagemDeitensGeladeira(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/ListagemDeitensGeladeira',
+            comunicacao__pb2.ListaGeladeiraRequest.SerializeToString,
+            comunicacao__pb2.ListaCervejaBar.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CadastroCerveja(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/CadastroCerveja',
+            comunicacao__pb2.CervejaCadastro.SerializeToString,
+            comunicacao__pb2.CadastroReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TrocarCerveja(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/comunicacao.Comunicar/TrocarCerveja',
+            comunicacao__pb2.TrocaRequest.SerializeToString,
+            comunicacao__pb2.TrocaReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

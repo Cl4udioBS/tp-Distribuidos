@@ -2,94 +2,6 @@ from entidades import database
 import sqlite3
 
 
-
-def enviaMsgServ(msg, cliente):
-    try:
-        cliente.send(f'\n(SERVIDOR): {msg}'.encode('utf-8'));
-        print(f"\nMsg enviada para: {cliente}!\n")
-    except:
-        print('Falha no envio!\n');
-        cliente.close();
-
-def recebeMsgServ(cliente):
-    try:
-        msg = cliente.recv(2048).decode('utf-8'); #socket transmite em bytes
-        return msg
-    except:
-        print('\nFalha na conexão com o cliente!');
-        cliente.close()
-        
-
-
-def menuTrocas(cliente):
-    enviaMsgServ('\t ========================================',cliente);
-    enviaMsgServ('\t OPCOES:\t=========================',cliente);
-    enviaMsgServ('\t 1:Solicitar troca                  \t=',cliente);
-    enviaMsgServ('\t 2:Cadastrar cerveja                \t=',cliente);
-    enviaMsgServ('\t 3:Ver sua Geladeira(Itens)         \t=',cliente);
-    enviaMsgServ('\t 4:Aceitar/Recusar trocas           \t=',cliente);
-    enviaMsgServ('\t 5:Kero Sair                        \t=',cliente);
-    enviaMsgServ('\t ========================================',cliente);
-    enviaMsgServ('\n\t = ESCOLHA UMA DAS OPCOES (EX.: 4) =\t\t=',cliente);
-
-
-def boasVindas(cliente, clientesAtivos):
-    enviaMsgServ('\t\t BEM VINDO AO kERO - SEU SD DE TROCAS DE CERVEJA',cliente);
-    enviaMsgServ('Insira seu nome: ',cliente);
-    nome = recebeMsgServ(cliente);     
-    valido = autenticacao(nome.lower());
-    if valido == 'T':
-        try:
-            while (True):
-                enviaMsgServ(f' {nome}, vamos as trocas?!\n',cliente)
-                transmissao(cliente, clientesAtivos, nome)
-                menuTrocas(cliente)
-                resp = recebeMsgServ(cliente)
-                if (resp == '1'):
-                    SolicitaTroca(cliente,nome)
-                elif (resp == '2'):
-                    CadastrarCerveja(cliente, nome)
-                elif (resp == '3'):
-                    listagemMeusItens(cliente, nome)
-                elif (resp == '4'):
-                    ListarTrocasPendentes(cliente,nome)                    
-                else:
-                    enviaMsgServ('Tchau!!!!',cliente)
-                    return
-        except:
-            print('Usuario fora do Sistema!')
-    else:
-        enviaMsgServ(f'{nome} => Não cadastrado !!!!', cliente)
-        enviaMsgServ('Deseja realizar cadastro? \n(K)ero\t(N)ao', cliente)      
-        resposta = recebeMsgServ(cliente).lower();
-        if (resposta == 'k'):
-            cadastroUsuario(nome,cliente)
-        else:            
-            enviaMsgServ(f'{nome}?! Sem cadastro, sem cerveja!', cliente)
-            enviaMsgServ('Voltando ao MENU PRINCIPAL ...\n', cliente)
-            return           
-
-def transmissao(cliente, clientesAtivos, nome): #verificar online
-    flag=0
-    trocasAtivas = database.SelectTrocas('p')
-    for clienteA in clientesAtivos:
-        if (clienteA == cliente):
-            enviaMsgServ('\t:)\tTROCAS PENDENTES:', cliente);
-            for trocas in trocasAtivas:
-                if trocas[4] == nome:
-                    flag = 1
-                    try:
-                       enviaMsgServ(f'Trocas pendentes: {trocas}', cliente);
-                    except:
-                        deletaCliente(clienteA,clientesAtivos);
-    if(flag==0):
-        enviaMsgServ(":/\tSua geladeira de TROCAS está vazia...\t:/ ",cliente);
-
-def deletaCliente(cliente, clientesAtivos):
-    clientesAtivos.remove(cliente);
-
-
-####! Itens usados na parte 4####
 def autenticacao(usuario):
     dadosLogin = [ ]
     
@@ -161,27 +73,28 @@ def listagemMeusItens(nome):
         return 400
 
 
-def CadastrarCerveja(nome,cerveja):
-    #cliente.send(f'\n(SERVIDOR) < {nome} > Vamos cadastrar uma cerveja'.encode('utf-8'))
-    #cliente.send(f'\ndigite o nome cerveja'.encode('utf-8'))
-    nomeCerveja = cerveja.nomeCerveja
-    #cliente.send(f'\nAgora digite o ABV (ABV é a sigla para ALCOHOL BY VOLUME, ou quão alcoolico é um exemplar)'
-    #.encode('utf-8'))
-    abv = cerveja.abv
-    #cliente.send(f'\nAgora digite o IBU (IBU é a sigla para International Bitterness Units, ou o quão amargo é um exemplar)'
-    #.encode('utf-8'))
-    ibu = cerveja.ibu
-    #cliente.send(f'\nTa quaaaase! Digite agora o estilo'.encode('utf-8'))
-    estilo = cerveja.estilo
-    #cliente.send(f'\nConfirma as informações pra gente?'.encode('utf-8'))
-    #cliente.send(f'\nnome: {nomeCerveja} ABV: {abv} IBU: {ibu} estilo:{estilo}'.encode('utf-8'))
-    #cliente.send(f'\n[S] [N]'.encode('utf-8'))
-    #cadastrar = cliente.recv(2048).decode('utf-8')
-    database.InsertCervejaBar("TPSD.db",nome,nomeCerveja,abv,ibu,estilo)
+def cadastrarCerveja(dadosCerveja):
+  
+    try:
+        nomeCerveja = dadosCerveja.cerveja
+        abv         = dadosCerveja.abv
+        ibu         = dadosCerveja.ibu
+        estilo      = dadosCerveja.estilo
+        nome        = dadosCerveja.nome
+
+        database.InsertCervejaBar("TPSD.db",nome,nomeCerveja,abv,ibu,estilo)
+        return 200
+
+    except:
+        print("Erro no cadastro!")
+        return 400
+
      
 
 
-def SolicitaTroca(indiceCervejaSolicit,indiceCervejaExec):
+def solicitaTroca(dadosTroca):
+    indiceCervejaSolicit    = dadosTroca.indiceCervejaSolicit
+    indiceCervejaExec       = dadosTroca.indiceCervejaExec
     
     try:
         #!Validar se tem itens no cliente
@@ -193,47 +106,6 @@ def SolicitaTroca(indiceCervejaSolicit,indiceCervejaExec):
             executor = breja2[1]
         response = database.InsertTrocaCervejas("TPSD.db",indiceCervejaSolicit,indiceCervejaExec,solicitante,executor)
         return response
-        """
-        res = listagemDeitensTroca(cliente, nome)
-        print("res: ",res)
-        if(res == 1):
-            cliente.send(f'\n(SERVIDOR) < {nome} > Escolha primeiro a cerveja que você deseja solicitar!'.encode('utf-8'))
-            cliente.send(f'\n(SERVIDOR) < {nome} > É só digitar o indice da desejada'.encode('utf-8'))
-            indiceExec= cliente.recv(2048).decode('utf-8');
-            if(indiceExec!=0):
-                cliente.send(f'\n(SERVIDOR) < {nome} > Incrivel, vou te mostrar as cervejas que você tem para oferecer numa troca!'
-                .encode('utf-8'))
-                tenhoItens = listagemMeusItens(cliente,nome)
-                if(tenhoItens == 1):
-
-                    cliente.send(f'\n(SERVIDOR) < {nome} > Agora só escolher o indice da cerveja que você deseja dar em troca'.encode('utf-8'))
-                    indiceSolic = cliente.recv(2048).decode('utf-8');
-                    dadosCervExec = database.SelectCervejaByIdBar(indiceExec)
-                    dadosCervSolic = database.SelectCervejaByIdBar(indiceSolic)
-                    if(indiceSolic!=0):
-                        cliente.send(f'\n(SERVIDOR) < {nome} > Confirmar troca da cerveja'.encode('utf-8'))
-                        for breja in dadosCervSolic:
-                            solicitante = breja[1]
-                            cliente.send(f'\n||Indice: {breja[0]} ||PROPRIETARIO: {breja[1]} ||CERVEJA: {breja[2]} ||ABV: {breja[3]} ||IBU: {breja[4]} ||ESTILO:{breja[5]} ||'.encode('utf-8'))
-                        cliente.send(f'\n(SERVIDOR) < {nome} > Pela cerveja'.encode('utf-8'))
-                        for breja2 in dadosCervExec:
-                            executor = breja2[1]
-                            cliente.send(f'\n||Indice: {breja2[0]} ||PROPRIETARIO: {breja2[1]} ||CERVEJA: {breja2[2]} ||ABV: {breja2[3]} ||IBU: {breja2[4]} ||ESTILO:{breja2[5]} ||'.encode('utf-8'))
-                        cliente.send(f'\n(SERVIDOR) < {nome} >[Sim] [Não]'.encode('utf-8'))
-                        confirm = cliente.recv(2048).decode('utf-8');
-
-                        if(confirm.lower() == 'sim'):
-                            cliente.send(f'\n(SERVIDOR) < {nome} >Troca solicitada, em breve você receberá o veredito'.encode('utf-8'))
-                            database.InsertTrocaCervejas("TPSD.db",indiceSolic,indiceExec,solicitante,executor)
-                            database.SelectTodasCervejas()
-                
-                else:
-                    cliente.send(f'\n(SERVIDOR) < {nome} >Você não tem nenhuma cerveja cadastrada deseja cadastrar?'.encode('utf-8'))
-                    cliente.send(f'\n(SERVIDOR) < {nome} >[S] [N]'.encode('utf-8'))
-                    cadastrar = cliente.recv(2048).decode('utf-8')
-                    if(cadastrar.lower() == 's'):
-                        CadastrarCerveja(cliente, nome)
-        """
 
     except:
         print("Error: Sorry :/")
@@ -313,8 +185,8 @@ def responderSolicitacao(resSolicitacao,indiceTroca,solic,exec):
 
            
      
-def ListarTrocasPendentesUsr(cliente, nome):
-    trocas = database.SelectTrocasByUsrExec(nome)
+def ListarTrocasPendentesUsr(usuario):
+    trocas = database.SelectTrocasByUsrExec(usuario)
     if(len(trocas)>0):
         return trocas
         """

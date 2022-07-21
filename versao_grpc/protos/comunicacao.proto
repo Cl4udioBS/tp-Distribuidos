@@ -2,17 +2,18 @@ syntax = "proto3";
 
 package comunicacao;
 
-// The greeting service definition.
+// Definiçao do Serviço de troca
 service Comunicar {
-	// Comunicação dupla
 	rpc Login (LoginRequest) returns (LoginReply);
   rpc CadastroUsuario (LoginRequest) returns (LoginReply);
-  rpc ListagemDeitensTroca (Vazia) returns (ListReply);
+  rpc ListagemDeitensTroca (Vazia) returns (ListaCervejaBar);
+  rpc ListagemDeitensGeladeira (ListaGeladeiraRequest) returns (ListaCervejaBar);
+  rpc CadastroCerveja (CervejaCadastro) returns (CadastroReply);
+  rpc TrocarCerveja (TrocaRequest) returns (TrocaReply);
 }
 
 message LoginRequest{
     string usuario = 1;
-    //tentar senha se der tempo
 }
 message LoginReply {
     string message = 1;
@@ -20,25 +21,42 @@ message LoginReply {
 message ListReply {
   string message = 1;
 }
+message CadastroReply {
+  string message = 1;
+}
+message ListRequest {
+  string message = 1;
+}
+message ListaGeladeiraRequest {
+  string usuario = 1;
+}
+message TrocaRequest {
+  string indiceCervejaExec = 1;
+  string indiceCervejaSolicit = 2;
+}
+message TrocaReply {
+  string message = 1;
+}
 
+message CervejaBar {
+  int32 id = 1;
+  string dono = 2;
+  string cerveja = 3;
+  string abv = 4;
+  string ibu = 5;
+  string estilo = 6;
+}
+
+message ListaCervejaBar{
+  repeated CervejaBar cerveja = 1;
+}
+
+message CervejaCadastro {
+  string cerveja = 1;
+  string abv = 2;
+  string ibu = 3;
+  string estilo = 4;
+  string nome = 5;
+}
 
 message Vazia{}
-
-/*
-
-// The request message containing the user's name.
-message MsgRequest {
-  string nome = 1;
-  //string mensagem = 2;}
-
-// The response message containing the response.
-message MsgReply {
-  string mensagem = 1;
-}
-
-message DelayedReply {
-	string mensagem = 1;
-	repeated MsgRequest requisicao = 2;
-}
-
-*/
