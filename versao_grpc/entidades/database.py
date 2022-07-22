@@ -93,7 +93,7 @@ def InsertUsuario(nomeBanco,nome, senha):
         cursor = sqliteConnection.cursor()
         cursor.execute("INSERT INTO Usuarios values (?, ?)",(nome, senha))
         sqliteConnection.commit()
-        print("DB: usuario inserido com sucesso", cursor.rowcount)
+        
         
         cursor.close()
         return 200
@@ -102,9 +102,9 @@ def InsertUsuario(nomeBanco,nome, senha):
         print("Error while connecting to sqlite", error)
 
 def InsertCervejaBar(nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo):
-    print("dados chegando: ",nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo)
+    
     try:
-        print("veio banco")
+        
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
         sqlite_insert_query = """INSERT INTO BAR
@@ -116,7 +116,7 @@ def InsertCervejaBar(nomeBanco,nome_usuario, nome_cerveja,abv,ibu,estilo):
         data = (nome_usuario, nome_cerveja,abv,ibu,estilo)
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
-        print("cervevja inserida com sucesso", cursor.rowcount)
+       
         cursor.close()
 
     except sqlite3.Error as error:
@@ -137,7 +137,7 @@ def InsertTrocaCervejas(nomeBanco,id_cerveja_solic, id_cerv_exec, solicitante, e
         data = (id_cerveja_solic, id_cerv_exec,solicitante,executor,"p")
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
-        print("Troca inserida com sucesso\n", cursor.rowcount)
+        
         cursor.close()
         return 200
     
@@ -165,7 +165,7 @@ def SelectTodosUsuarios(nomeBanco):
         print("Error while connecting to sqlite", error)
 
 def SelectTrocas(status):
-    print("select trocas")
+    #print("select trocas")
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
@@ -178,7 +178,7 @@ def SelectTrocas(status):
         listaUsuarios = []
         for row in records:
             troca = [row[0],row[1], row[2], row[3], row[4], row[5]]
-            print("row 4: ", row[4])
+            
             listaUsuarios.append(troca)
     
         cursor.close()
@@ -188,7 +188,7 @@ def SelectTrocas(status):
         print("Error while connecting to sqlite", error)
 
 def SelectTrocaById(id):
-    print("select trocas")
+    #print("select trocas")
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
@@ -201,7 +201,7 @@ def SelectTrocaById(id):
         listaUsuarios = []
         for row in records:
             troca = [row[0],row[1], row[2], row[3], row[4], row[5]]
-            print("row 4: ", row[4])
+            
             listaUsuarios.append(troca)
     
         cursor.close()
@@ -211,7 +211,6 @@ def SelectTrocaById(id):
         print("Error while connecting to sqlite", error)
 
 def SelectTrocasByUsrExec(nome):
-    print("select trocas exec",nome)
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
@@ -222,7 +221,7 @@ def SelectTrocasByUsrExec(nome):
         records = cursor.fetchall()
 
         listaUsuarios = []
-        print("records: ", records)
+        
         for row in records:
             troca = [row[0],row[1], row[2], row[3], row[4], row[5]]
             listaUsuarios.append(troca)
@@ -235,7 +234,7 @@ def SelectTrocasByUsrExec(nome):
 
 def SelectUsuarioByNome(nome):
     try:
-        print("oi teste: ", nome)
+        
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
         sqlite_select_query = """SELECT * FROM Usuarios where nome = ?"""
@@ -250,7 +249,7 @@ def SelectUsuarioByNome(nome):
             usuario.append(item)
     
         cursor.close()
-        print("oi usuario: ", usuario)
+        
         return usuario
 
     except sqlite3.Error as error:
@@ -352,8 +351,7 @@ def AceitaTroca(nomeBanco,id_troca):
       
         
         sqliteConnection.commit()
-        print("Troca atualizada com sucesso", cursor.rowcount)
-
+      
         cursor.close()
         #SelectUsersTroca(nomeBanco,id_troca)
     
@@ -370,7 +368,7 @@ def RejeitaTroca(nomeBanco,id_troca):
         data = ("r",id_troca)
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
-        print("Troca atualizada com sucesso", cursor.rowcount)
+        
         cursor.close()
     
     except sqlite3.Error as error:
@@ -382,10 +380,9 @@ def TrocaTitularidade(nomeBanco, nomeNovoDono,idCervejaExec):
         cursor = sqliteConnection.cursor()
         sqlite_insert_query = """Update Bar set nome_usuario = ? where id = ?"""
         data = (nomeNovoDono,idCervejaExec)
-        print("data: ",data)
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
-        print("Troca atualizada com sucesso", cursor.rowcount)
+        
         cursor.close()
     
     except sqlite3.Error as error:
@@ -413,7 +410,7 @@ def InicializaBD():
             SelectTodasCervejas()
             InsertTrocaCervejas(nomeBanco, 3, 1, "aryel", "claudio")           
             trocasPendentes = SelectTrocas("p")
-            print("trocas pendentes", trocasPendentes)
+            
 
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
@@ -421,13 +418,13 @@ def InicializaBD():
 
 def TesteBD():
     teste = SelectTodosUsuarios(nomeBanco)
-    print("usuarios: ", teste)
+    
     cervejas = SelectTodasCervejas()
-    print("todas cervejas: ", cervejas)
+    
     especifica = SelectCervejaByNome("brahma")
     print(especifica)
     test = SelectCervejaByUsuario("claudio")
-    print("um usuario: ", test)
+   
 
 if __name__ == "__main__":
     InicializaBD()

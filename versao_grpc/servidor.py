@@ -1,6 +1,4 @@
 from concurrent import futures
-#talvez utilziar time
-import time 
 import grpc
 import comunicacao_pb2
 import comunicacao_pb2_grpc

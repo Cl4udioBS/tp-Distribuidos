@@ -1,6 +1,5 @@
 #talvez utilziar time
 from pickle import FALSE, TRUE
-import time
 import grpc
 import comunicacao_pb2
 import comunicacao_pb2_grpc

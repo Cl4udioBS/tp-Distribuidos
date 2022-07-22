@@ -8,7 +8,6 @@ def autenticacao(usuario):
     try:
         dadosLogin = database.SelectTodosUsuarios('TPSD.db')
         cadastro = "F"
-        print(usuario)
         for check in dadosLogin:
             if (check == usuario):
                 cadastro = "T"
@@ -18,7 +17,6 @@ def autenticacao(usuario):
 
 def cadastroUsuario(nome):
     response = database.InsertUsuario('TPSD.db',nome, '1234')
-    print(f'SERVIDOR: Usuario {nome} inserido com sucesso!')
     return response
 
  
@@ -67,7 +65,6 @@ def solicitaTroca(dadosTroca):
     indiceCervejaExec       = dadosTroca.indiceCervejaExec
     
     try:
-        #!Validar se tem itens no cliente
         dadosCervExec = database.SelectCervejaByIdBar(indiceCervejaExec)
         dadosCervSolic = database.SelectCervejaByIdBar(indiceCervejaSolicit)
         for breja in dadosCervSolic:
