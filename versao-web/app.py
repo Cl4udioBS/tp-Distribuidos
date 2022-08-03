@@ -22,6 +22,13 @@ def bar_page():
     cervejas = db.SelectTodasCervejas()
     return render_template('bar.html', cervejas=cervejas)
 
+@app.route('/geladeira')
+def geladeira_page():
+    cervejas = db.SelectCervejaByUsuario("claudio")
+    print(cervejas)
+    return render_template('geladeira.html', cervejas=cervejas)
+
+
 ls.run("0.0.0.0", 8080)
 '''
 if __name__ == '__main__':
