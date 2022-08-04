@@ -48,9 +48,13 @@ def bar_page():
 
 @app.route('/geladeira', methods = ["GET"])
 def geladeira_page():
-    cervejas = kero.listagemMeusItens("claudio")
-    return render_template('geladeira.html', cervejas=cervejas)
-
+    if "usuario" in session:
+        usuario = session["usuario"]
+        cervejas = kero.listagemMeusItens(usuario)
+        return render_template('geladeira.html', cervejas=cervejas)
+    else:
+        
+        return render_template('login.html', resposta="Não está logado!")
 @app.route('/trocas', methods = ["POST", "GET", "PUT"])
 def trocas_page():
     flag = False

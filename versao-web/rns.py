@@ -94,7 +94,9 @@ def responderSolicitacao(resSolicitacao,indiceTroca):
         try:
             database.AceitaTroca("TPSD.db",indiceTroca)
             troca = database.SelectTrocaById(indiceTroca)
+            print(troca)
             database.TrocaTitularidade("TPSD.db",troca[0][3],troca[0][2])
+            database.TrocaTitularidade("TPSD.db",troca[0][4],troca[0][1])
             
             return 200
         except:
