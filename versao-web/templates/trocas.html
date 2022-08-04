@@ -22,9 +22,9 @@
             <td>{{ trocas[1] }}</td>
             <td>{{ trocas[2] }}</td>
           </tr>
-    </table>
           {% endfor %}
         </tbody>
+    </table>
           <h4>Quer aceitar/recusar alguma troca?</h4>
           <form method="POST">
             <p> </p>
@@ -64,6 +64,19 @@
         {% endfor %}
       </tbody>
   </table>
+
+  {% if flag %}
   <h3>Deseja realizar uma troca?</h3>
+
+  <form method="POST">
+    <p> </p>
+    <div><label>Indice da Cerveja que deseja oferecer: <input type="text" name="indiceindiceCervejaExec"></label></div>
+    <div><label>Indice da Cerveja que deseja solicitar: <input type="text" name="indiceCervejaSolicit"></label></div>
+    <input type="submit" name="btn" value="Kero Trocar">
+    <p> </p>
+    </div>
+  </form>
+  {% endif %}
+
 </div>
 {% endblock %}

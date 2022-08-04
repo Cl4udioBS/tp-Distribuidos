@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %} Kero - Cervejas Artesanais {% endblock %}
+{% block content %} 
+  <h1> {{ usuario }}, bem vindo a guia de CADASTRO!</h1>
+  <p>Insira as informações da sua cerveja : </p>
+
+  <form method="POST">
+    <p> </p>
+    <div><label>CERVEJA   =<input type="text" name="cerveja"></label></div>
+    <div><label>ABV       =<input type="text" name="abv"></label></div>
+    <div><label>IBU       =<input type="text" name="ibu"></label></div>
+    <div><label>ESTILO    =<input type="text" name="estilo"></label></div>
+
+    <input type="submit" name="btn" value="Kero CADASTRAR">
+    <p> </p>
+    </div>
+  </form>
+{% endblock %}

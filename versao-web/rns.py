@@ -44,14 +44,14 @@ def listagemMeusItens(nome):
         return 400
 
 
-def cadastrarCerveja(dadosCerveja):
+def cadastrarCerveja(cerveja, abv, ibu, estilo, nome   ):
   
     try:
-        nomeCerveja = dadosCerveja.cerveja
-        abv         = dadosCerveja.abv
-        ibu         = dadosCerveja.ibu
-        estilo      = dadosCerveja.estilo
-        nome        = dadosCerveja.nome
+        nomeCerveja = cerveja
+        abv         = abv
+        ibu         = ibu
+        estilo      = estilo
+        nome        = nome
 
         database.InsertCervejaBar("TPSD.db",nome,nomeCerveja,abv,ibu,estilo)
         return 200
@@ -60,10 +60,8 @@ def cadastrarCerveja(dadosCerveja):
         print("Erro no cadastro!")
         return 400
    
-def solicitaTroca(dadosTroca):
-    indiceCervejaSolicit    = dadosTroca.indiceCervejaSolicit
-    indiceCervejaExec       = dadosTroca.indiceCervejaExec
-    
+def solicitaTroca(indiceCervejaSolicit,indiceCervejaExec ):
+   
     try:
         dadosCervExec = database.SelectCervejaByIdBar(indiceCervejaExec)
         dadosCervSolic = database.SelectCervejaByIdBar(indiceCervejaSolicit)
@@ -77,6 +75,7 @@ def solicitaTroca(dadosTroca):
     except:
         print("Error: Sorry :/")
         response = 400
+        return response
 
 def listarTrocasPendentes(usuario):
     trocas = database.SelectTrocas("p")
@@ -96,6 +95,7 @@ def responderSolicitacao(resSolicitacao,indiceTroca):
             database.AceitaTroca("TPSD.db",indiceTroca)
             troca = database.SelectTrocaById(indiceTroca)
             database.TrocaTitularidade("TPSD.db",troca[0][3],troca[0][2])
+            
             return 200
         except:
             return 400
