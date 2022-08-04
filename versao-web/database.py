@@ -406,7 +406,7 @@ def InicializaBD():
             InsertUsuario(nomeBanco,"aryel","1")
             InsertUsuario(nomeBanco,"thais","2")
             InsertCervejaBar(nomeBanco,"claudio","guinnes", 4.5,27,"irish stout")
-            InsertCervejaBar(nomeBanco,"claudio","brahma", 4.8,18,"international lager")
+            InsertCervejaBar(nomeBanco,"claudio","crystal", 4.8,18,"international lager")
             InsertCervejaBar(nomeBanco,"aryel","brahma", 4.8,18,"international lager")
             SelectTodasCervejas()
             InsertTrocaCervejas(nomeBanco, 3, 1, "aryel", "claudio")           
