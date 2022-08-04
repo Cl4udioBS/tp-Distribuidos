@@ -374,12 +374,12 @@ def RejeitaTroca(nomeBanco,id_troca):
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
 
-def TrocaTitularidade(nomeBanco, nomeNovoDono,idCervejaExec):
+def TrocaTitularidade(nomeBanco, exec,idCervejaExec):
     try:
         sqliteConnection = sqlite3.connect(nomeBanco)
         cursor = sqliteConnection.cursor()
         sqlite_insert_query = """Update Bar set nome_usuario = ? where id = ?"""
-        data = (nomeNovoDono,idCervejaExec)
+        data = (exec,idCervejaExec)
         cursor.execute(sqlite_insert_query,data)
         sqliteConnection.commit()
         
