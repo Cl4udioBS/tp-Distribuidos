@@ -1,13 +1,29 @@
 {% extends "base.html" %}
 {% block title %} Kero - Cervejas Artesanais {% endblock %}
 {% block content %} 
-<form method="POST">
-  <p> </p>
-  <div><label>Usuario: <input type="text" name="usuario"></label></div>
-  <div><label>Senha: <input type="text" name="senha"></label></div>
-    <input type="submit" value="Entrar">  
-  <p> </p>
-  </div>
-   <h2> {{  resposta  }} </h2> 
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+   
+  </head>
+  <body>
+    <form class="mt-5" method="POST">
+      <p> </p>
+
+      <div class="inputbox">
+        <span>Usuario</span>
+        <input class="ml-3" type="text" name="usuario">
+      
+        <button type="submit" class="btn btn-primary ml-3">Entrar</button>
+      </div>
+
+     
+       
+      <p> </p>
+      </div>
+       <h2> {{  resposta  }} </h2> 
+    </form>
+  </body>
+</html>
+
 {% endblock %}

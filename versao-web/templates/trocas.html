@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %} Kero - Cervejas Artesanais {% endblock %}
 {% block content %} 
+<div class="trocas text-center mt-2 ">
+  
+
   <h1>Bem vindo a guia de trocas!</h1>
   <div class="container-fluid">
     <table class="table table-striped">
@@ -29,8 +32,8 @@
           <form method="POST">
             <p> </p>
             <div><label>Indice: <input type="text" name="indice"></label></div>
-              <input type="submit" name="btn" value="Kero">
-              <input type="submit" name="btn" value="Não Kero">
+              <button class="btn"type="submit" name="btn" value="Kero">Kero</button>
+              <button class="btn" type="submit" name="btn" value="Não Kero">Não Kero</button>
             <p> </p>
             </div>
           </form>
@@ -72,11 +75,12 @@
     <p> </p>
     <div><label>Indice da Cerveja que deseja oferecer: <input type="text" name="indiceindiceCervejaExec"></label></div>
     <div><label>Indice da Cerveja que deseja solicitar: <input type="text" name="indiceCervejaSolicit"></label></div>
-    <input type="submit" name="btn" value="Kero Trocar">
+    <button class="btn" type="submit" name="btn" value="Kero Trocar">Kero Trocar</button>
     <p> </p>
     </div>
   </form>
   {% endif %}
 
+</div>
 </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Kero - Cervejas Artesanais {% endblock %}
 {% block content %} 
+<div class="bar text-center mt-2">
   <h1> {{ usuario }}, bem vindo ao nosso BAR!</h1>
   <p>As opções disponíveis são: </p>
 
@@ -28,4 +29,6 @@
         {% endfor %}
       </tbody>
   </table>
+</div>
+  
 {% endblock %}

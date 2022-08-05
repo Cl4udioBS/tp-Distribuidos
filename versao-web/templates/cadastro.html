@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 {% block title %} Kero - Cervejas Artesanais {% endblock %}
 {% block content %} 
+<div class="cadastro text-center mt-2 ">
+
+
   <h1> {{ usuario }}, bem vindo a guia de CADASTRO!</h1>
   <p>Insira as informações da sua cerveja : </p>
 
-  <form method="POST">
+  <form class="d-flex justify-content-center align-items-center"method="POST">
     <p> </p>
-    <div><label>CERVEJA   =<input type="text" name="cerveja"></label></div>
-    <div><label>ABV       =<input type="text" name="abv"></label></div>
-    <div><label>IBU       =<input type="text" name="ibu"></label></div>
-    <div><label>ESTILO    =<input type="text" name="estilo"></label></div>
+    <div><label>CERVEJA<input class="cadastroInput ml-1" type="text" name="cerveja"></label></div>
+    <div><label class="ml-3">ABV<input class="cadastroInput ml-1" type="text" name="abv"></label></div>
+    <div><label class="ml-3">IBU<input class="cadastroInput ml-1" type="text" name="ibu"></label></div>
+    <div><label class="ml-3">ESTILO<input class="cadastroInput ml-1" type="text" name="estilo"></label></div>
+    
 
-    <input type="submit" name="btn" value="Kero CADASTRAR">
+    <button class="btn ml-5 h-80"  value="Kero CADASTRAR">Kero CADASTRAR</button>
+
     <p> </p>
     </div>
   </form>
+</div>
 {% endblock %}
